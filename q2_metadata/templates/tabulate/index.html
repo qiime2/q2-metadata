@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-lg-12">
+      <p>Export options:</p>
+      <table id='table' class='table table-hover'></table>
+    </div>
+  </div>
+  <link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
+  <script type="text/javascript" src="./js/datatables.min.js"></script>
+
+  <script type="text/javascript">
+    $(document).ready(function(){
+      var table = JSON.parse('{{ table }}');
+      var columns = $.map(table.columns, function(val) { return { title: val }; });
+      var filename = 'metadata';
+
+      $('#table').DataTable({
+        data: table.data,
+        columns: columns,
+        pageLength: {{ page_size }},
+        dom: 'Bfrtip',
+        buttons: [
+          { extend: 'csv', filename: filename, text: 'TSV', fieldSeparator: '\t', extension: '.tsv' },
+          { extend: 'csv', filename: filename },
+          { extend: 'excel', filename: filename },
+          'copy',
+          'print',
+        ],
+      });
+    });
+  </script>
+{% endblock %}
