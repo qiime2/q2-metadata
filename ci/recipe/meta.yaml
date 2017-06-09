@@ -1,0 +1,34 @@
+{% set data = load_setup_py_data() %}
+{% set version = data.get('version') or 'placehold' %}
+{% set release = '.'.join(version.split('.')[:2]) %}
+
+package:
+  name: q2-metadata
+  version: {{ version }}
+
+source:
+  path: ../..
+
+build:
+  script: python setup.py install
+
+requirements:
+  build:
+    - python 3.5*
+    - setuptools
+
+  run:
+    - python 3.5*
+    - setuptools
+    - qiime2 {{ release }}.*
+    - q2templates {{ release }}.*
+
+test:
+  imports:
+    - q2_metadata
+    - qiime2.plugins.metadata
+
+about:
+  home: https://qiime2.org
+  license: BSD-3-Clause
+  license_family: BSD
