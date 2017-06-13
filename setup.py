@@ -23,5 +23,8 @@ setup(
         "qiime2.plugins":
         ["q2-metadata=q2_metadata.plugin_setup:plugin"]
     },
+    package_data={
+        'q2_metadata': ['templates/tabulate/*'],
+    },
     zip_safe=False,
 )
