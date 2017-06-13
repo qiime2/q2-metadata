@@ -37,7 +37,7 @@ plugin.visualizers.register_function(
         'page_size': 'The maximum number of Metadata records to display '
                      'per page',
     },
-    name='tabulate',
+    name='Interactively explore Metadata in an HTML table',
     description='Generate a tabular view of Metadata. The output '
                 'visualization supports interactive filtering, sorting, and '
                 'exporting to common file formats.',
