@@ -10,8 +10,8 @@ import qiime2.plugin
 
 import q2_metadata
 
-from ._tabulate import tabulate
-
+from q2_metadata import tabulate, distance_matrix
+from q2_types.distance_matrix import DistanceMatrix
 
 plugin = qiime2.plugin.Plugin(
     name='metadata',
@@ -23,6 +23,18 @@ plugin = qiime2.plugin.Plugin(
     description=('This QIIME 2 plugin provides functionality for working with '
                  'and visualizing Metadata.'),
     short_description='Plugin for working with Metadata.'
+)
+
+plugin.methods.register_function(
+    function=distance_matrix,
+    inputs={},
+    parameters={'metadata': qiime2.plugin.MetadataCategory},
+    parameter_descriptions={},
+    outputs=[('distance_matrix', DistanceMatrix)],
+    name='Create a distance matrix from a Metadata category',
+    description='Create a distance matrix from a metadata category. Pairwise '
+                'distances are computed as the Euclidean distance between each'
+                ' pair of samples in the category.'
 )
 
 plugin.visualizers.register_function(
