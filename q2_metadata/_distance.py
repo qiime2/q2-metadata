@@ -6,10 +6,6 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import os
-import pkg_resources
-import shutil
-
 import skbio
 import qiime2
 import numpy
