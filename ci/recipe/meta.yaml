@@ -20,6 +20,9 @@ requirements:
   run:
     - python 3.5*
     - setuptools
+    - numpy
+    - scipy
+    - pandas
     - scikit-bio
     - qiime2 {{ release }}.*
     - q2templates {{ release }}.*
