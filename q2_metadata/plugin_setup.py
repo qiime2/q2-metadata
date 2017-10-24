@@ -29,12 +29,15 @@ plugin.methods.register_function(
     function=distance_matrix,
     inputs={},
     parameters={'metadata': qiime2.plugin.MetadataCategory},
-    parameter_descriptions={},
+    parameter_descriptions={'metadata': 'Numeric metadata category to compute '
+                                        'pairwise Euclidean distances from'},
     outputs=[('distance_matrix', DistanceMatrix)],
-    name='Create a distance matrix from a Metadata category',
-    description='Create a distance matrix from a metadata category. Pairwise '
-                'distances are computed as the Euclidean distance between each'
-                ' pair of samples in the category.'
+    name='Create a distance matrix from a numeric Metadata category',
+    description='Create a distance matrix from a numeric metadata category. '
+                'The Euclidean distance is computed between each pair of '
+                'samples or features in the category.\n\n'
+                'Tip: the distance matrix produced by this method can be used '
+                'as input to the Mantel test available in `q2-diversity`.'
 )
 
 plugin.visualizers.register_function(

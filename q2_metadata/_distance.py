@@ -8,29 +8,36 @@
 
 import skbio
 import qiime2
-import numpy
+import numpy as np
 import scipy
 import pandas as pd
 
 
-def _metadata_distance(metadata: pd.Series) -> skbio.DistanceMatrix:
+def distance_matrix(metadata: qiime2.MetadataCategory) -> skbio.DistanceMatrix:
+    try:
+        series = pd.to_numeric(metadata.to_series(), errors='raise')
+    except ValueError as e:
+        raise ValueError(
+            "Encountered non-numeric values in the metadata cateogry. A "
+            "distance matrix can only be computed from numeric metadata. "
+            "Original error message:\n\n%s" % e)
+
+    # TODO this check can be removed when MetadataCategory is no longer allowed
+    # to be empty
+    if series.empty:
+        raise ValueError(
+            "Encountered metadata category that is empty, i.e. there are no "
+            "samples or features in the metadata to compute distances "
+            "between.")
+
+    if series.hasnans:
+        raise ValueError(
+            "Encountered missing value(s) in the metadata category. Computing "
+            "a distance matrix from missing values is not supported.")
+
     # This code is derived from @jairideout's scikit-bio cookbook recipe,
     # "Exploring Microbial Community Diversity"
     # https://github.com/biocore/scikit-bio-cookbook
     distances = scipy.spatial.distance.pdist(
-        metadata.values[:, numpy.newaxis], metric='euclidean')
-    return skbio.DistanceMatrix(distances, ids=metadata.index)
-
-
-def distance_matrix(metadata: qiime2.MetadataCategory) -> skbio.DistanceMatrix:
-    try:
-        metadata = pd.to_numeric(metadata.to_series(), errors='raise')
-    except ValueError as e:
-        raise ValueError('Only numeric data can be used with the Mantel test. '
-                         'Non-numeric data was encountered in the sample '
-                         'metadata. Orignal error message follows:\n%s' %
-                         str(e))
-
-    metadata = metadata.replace(r'', numpy.nan).dropna()
-
-    return _metadata_distance(metadata)
+        series.values[:, np.newaxis], metric='euclidean')
+    return skbio.DistanceMatrix(distances, ids=series.index)
