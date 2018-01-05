@@ -18,7 +18,7 @@ from q2_metadata import tabulate
 
 class TabulateTests(TestCase):
     def test_valid_metadata(self):
-        index = ['sample1', 'sample2', 'sample3']
+        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data = ['1.0', '2.0', '3.0']
         md = qiime2.Metadata(pd.DataFrame({'foo': data}, index=index,
                                           dtype=object))
@@ -31,12 +31,12 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["index","foo"]' in viz)
+            self.assertTrue('"columns":["id","foo"]' in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(val in viz for val in data))
 
-    def test_valid_metadata_many_categories(self):
-        index = ['sample1', 'sample2', 'sample3']
+    def test_valid_metadata_many_columns(self):
+        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data = [['1.0', 'lorem', 'peanut'],
                 ['2.0', 'ipsum', 'the'],
                 ['3.0', 'emrakul', 'dog']]
@@ -51,14 +51,14 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["index","foo","bar","baz"]' in viz)
+            self.assertTrue('"columns":["id","foo","bar","baz"]' in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(v in viz for row in data for v in row))
 
     def test_multiple_dtypes(self):
-        index = ['sample1', 'sample2', 'sample3']
+        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data = [[1.0, 'lorem'], [2.0, 'ipsum'], [3.0, 'emrakul']]
-        md = qiime2.Metadata(pd.DataFrame(data, index=index, dtype=object,
+        md = qiime2.Metadata(pd.DataFrame(data, index=index,
                                           columns=['foo', 'bar']))
 
         with tempfile.TemporaryDirectory() as output_dir:
@@ -67,14 +67,14 @@ class TabulateTests(TestCase):
             self.assertTrue(os.path.exists(index_fp))
 
             viz = open(index_fp).read()
-
+            print(viz)
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["index","foo","bar"]' in viz)
+            self.assertTrue('"columns":["id","foo","bar"]' in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(str(v) in viz for row in data for v in row))
 
     def test_pagination(self):
-        index = ['sample1', 'sample2', 'sample3']
+        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         values = ['1.0', '2.0', '3.0']
         md = qiime2.Metadata(pd.DataFrame({'value': values}, index=index))
 
@@ -88,7 +88,7 @@ class TabulateTests(TestCase):
             self.assertTrue('pageLength: 2' in viz)
 
     def test_invalid_pagination(self):
-        index = ['sample1', 'sample2', 'sample3']
+        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         values = ['1.0', '2.0', '3.0']
         md = qiime2.Metadata(pd.DataFrame({'value': values}, index=index))
 
