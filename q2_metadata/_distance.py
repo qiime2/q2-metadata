@@ -14,16 +14,17 @@ import scipy
 
 def distance_matrix(metadata: qiime2.NumericMetadataColumn)\
         -> skbio.DistanceMatrix:
-    series = metadata.to_series()
-
-    if series.hasnans:
+    if metadata.has_missing_values():
+        missing = metadata.get_ids(with_missing_value=True)
         raise ValueError(
             "Encountered missing value(s) in the metadata column. Computing "
-            "a distance matrix from missing values is not supported.")
+            "a distance matrix from missing values is not supported. IDs with "
+            "missing values: %s" % ', '.join(sorted(missing)))
 
     # This code is derived from @jairideout's scikit-bio cookbook recipe,
     # "Exploring Microbial Community Diversity"
     # https://github.com/biocore/scikit-bio-cookbook
+    series = metadata.to_series()
     distances = scipy.spatial.distance.pdist(
         series.values[:, np.newaxis], metric='euclidean')
     return skbio.DistanceMatrix(distances, ids=series.index)

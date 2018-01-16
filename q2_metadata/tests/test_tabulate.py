@@ -67,7 +67,6 @@ class TabulateTests(TestCase):
             self.assertTrue(os.path.exists(index_fp))
 
             viz = open(index_fp).read()
-            print(viz)
             self.assertTrue('pageLength: 100' in viz)
             self.assertTrue('"columns":["id","foo","bar"]' in viz)
             self.assertTrue(all(i in viz for i in index))
