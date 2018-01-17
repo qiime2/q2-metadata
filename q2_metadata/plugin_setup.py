@@ -7,11 +7,13 @@
 # ----------------------------------------------------------------------------
 
 import qiime2.plugin
+from qiime2.plugin import MetadataColumn, Numeric
 
 import q2_metadata
 
 from q2_metadata import tabulate, distance_matrix
 from q2_types.distance_matrix import DistanceMatrix
+
 
 plugin = qiime2.plugin.Plugin(
     name='metadata',
@@ -28,14 +30,14 @@ plugin = qiime2.plugin.Plugin(
 plugin.methods.register_function(
     function=distance_matrix,
     inputs={},
-    parameters={'metadata': qiime2.plugin.MetadataCategory},
-    parameter_descriptions={'metadata': 'Numeric metadata category to compute '
+    parameters={'metadata': MetadataColumn[Numeric]},
+    parameter_descriptions={'metadata': 'Numeric metadata column to compute '
                                         'pairwise Euclidean distances from'},
     outputs=[('distance_matrix', DistanceMatrix)],
-    name='Create a distance matrix from a numeric Metadata category',
-    description='Create a distance matrix from a numeric metadata category. '
+    name='Create a distance matrix from a numeric Metadata column',
+    description='Create a distance matrix from a numeric metadata column. '
                 'The Euclidean distance is computed between each pair of '
-                'samples or features in the category.\n\n'
+                'samples or features in the column.\n\n'
                 'Tip: the distance matrix produced by this method can be used '
                 'as input to the Mantel test available in `q2-diversity`.'
 )
