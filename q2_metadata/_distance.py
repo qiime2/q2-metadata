@@ -15,7 +15,7 @@ import scipy
 def distance_matrix(metadata: qiime2.NumericMetadataColumn)\
         -> skbio.DistanceMatrix:
     if metadata.has_missing_values():
-        missing = metadata.get_ids(with_missing_value=True)
+        missing = metadata.get_ids(where_values_missing=True)
         raise ValueError(
             "Encountered missing value(s) in the metadata column. Computing "
             "a distance matrix from missing values is not supported. IDs with "
