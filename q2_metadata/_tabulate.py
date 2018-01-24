@@ -25,6 +25,9 @@ def tabulate(output_dir: str, input: qiime2.Metadata,
     df = input.to_dataframe()
     df.reset_index(inplace=True)
     table = df.to_json(orient='split')
+    # JSON spec doesn't allow single quotes in string values, at all. It does
+    # however allow unicode values.
+    table = table.replace("'", r'\u0027')
 
     index = os.path.join(TEMPLATES, 'tabulate', 'index.html')
     q2templates.render(index, output_dir,
