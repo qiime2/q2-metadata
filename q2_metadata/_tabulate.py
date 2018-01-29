@@ -10,6 +10,8 @@ import os
 import pkg_resources
 import shutil
 
+import pandas as pd
+
 import qiime2
 import q2templates
 
@@ -23,6 +25,10 @@ def tabulate(output_dir: str, input: qiime2.Metadata,
         raise ValueError('Cannot render less than one record per page.')
 
     df = input.to_dataframe()
+    df_columns = pd.MultiIndex.from_tuples(
+        [(n, t.type) for n, t in input.columns.items()],
+        names=['column header', 'type'])
+    df.columns = df_columns
     df.reset_index(inplace=True)
     table = df.to_json(orient='split')
     # JSON spec doesn't allow single quotes in string values, at all. It does

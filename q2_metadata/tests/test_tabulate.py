@@ -31,7 +31,8 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["id","foo"]' in viz)
+            self.assertTrue('"columns":[["id",""],["foo","categorical"]]'
+                            in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(val in viz for val in data))
 
@@ -51,7 +52,9 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["id","foo","bar","baz"]' in viz)
+            self.assertTrue('"columns":[["id",""],["foo","categorical"],'
+                            '["bar","categorical"],["baz","categorical"]]'
+                            in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(v in viz for row in data for v in row))
 
@@ -68,7 +71,8 @@ class TabulateTests(TestCase):
 
             viz = open(index_fp).read()
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["id","foo","bar"]' in viz)
+            self.assertTrue('"columns":[["id",""],["foo","numeric"],'
+                            '["bar","categorical"]]' in viz)
             self.assertTrue(all(i in viz for i in index))
             self.assertTrue(all(str(v) in viz for row in data for v in row))
 
@@ -109,7 +113,8 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":["id","foo"]' in viz)
+            self.assertTrue('"columns":[["id",""],["foo","categorical"]]'
+                            in viz)
             self.assertTrue(all(i in viz for i in index))
             unicodified = [r'\u00271.0\u0027', r'\u00272.0\u0027',
                            r'\u00273.0\u0027']
