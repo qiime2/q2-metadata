@@ -13,6 +13,8 @@
   <script type="text/javascript">
     $(document).ready(function(){
       var data = JSON.parse('{{ table }}');
+      // Manually set the directive label
+      data.columns[0][1] = '#q2:types';
       var filename = 'metadata';
       var table = $('#table'), head = $('<thead></thead>'), row = $('<tr></tr>');
       table.append(head);
@@ -21,7 +23,7 @@
         row.append(function() {
           var cell = '<th>' + val[0] + '<br>';
           if (i === 0) {
-            cell += '<span class="label label-default">#q2:types</span>';
+            cell += '<span class="label label-default">' + val[1]  + '</span>';
           } else {
             var type = val[1] === 'numeric' ? 'primary' : 'success';
             cell += '<span class="label label-' + type + '">' + val[1] +'</span>';
@@ -31,17 +33,24 @@
         });
       });
 
+      var cleanDirectives = function(delimiter) {
+        return function(exportData) {
+          exportData = exportData.split('\n');
+          exportData.unshift(data[0]);  // duplicate first row to stash the types directive in
+          exportData[0] = $.map(data.columns, function(c) { return '\"' + c[0] + '\"'; }).join(delimiter);
+          exportData[1] = $.map(data.columns, function(c) { return '\"' + c[1] + '\"'; }).join(delimiter);
+          return exportData.join('\n');
+        }
+      }
+
       table.DataTable({
         data: data.data,
         fixedHeader: true,
         pageLength: {{ page_size }},
         dom: 'Bfrtip',
         buttons: [
-          { extend: 'csv', filename: filename, text: 'TSV', fieldSeparator: '\t', extension: '.tsv' },
-          { extend: 'csv', filename: filename },
-          { extend: 'excel', filename: filename },
-          { extend: 'copy', fieldBoundary: '"' },
-          'print',
+          { extend: 'csv', filename: filename, text: 'TSV', fieldSeparator: '\t', extension: '.tsv', customize: cleanDirectives('\t'), },
+          { extend: 'csv', filename: filename , customize: cleanDirectives(','), },
         ],
       });
     });
