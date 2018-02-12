@@ -30,7 +30,10 @@ def tabulate(output_dir: str, input: qiime2.Metadata,
         names=['column header', 'type'])
     df.columns = df_columns
     df.reset_index(inplace=True)
-    table = df.to_json(orient='split')
+    # `force_ascii` ensures that unicode code points are emitted. `True` is the
+    # default setting for this parameter, but explicitly setting here in case
+    # of future pandas API changes.
+    table = df.to_json(orient='split', force_ascii=True)
     # JSON spec doesn't allow single quotes in string values, at all. It does
     # however allow unicode values.
     table = table.replace("'", r'\u0027')
@@ -38,6 +41,8 @@ def tabulate(output_dir: str, input: qiime2.Metadata,
     index = os.path.join(TEMPLATES, 'tabulate', 'index.html')
     q2templates.render(index, output_dir,
                        context={'table': table, 'page_size': page_size})
+
+    input.save(os.path.join(output_dir, 'metadata.tsv'))
 
     js = os.path.join(TEMPLATES, 'tabulate', 'datatables.min.js')
     os.mkdir(os.path.join(output_dir, 'js'))
