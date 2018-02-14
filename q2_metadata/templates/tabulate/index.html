@@ -5,11 +5,12 @@
     <div class="col-lg-12">
       <p>
         <a href="metadata.tsv" target="_blank" rel="noopener noreferrer" class="btn btn-default">
-          Download normalized (and if applicable, merged) metadata
+          Download metadata TSV file
         </a>
-        <br>
-        This file won't necessarily reflect dynamic sorting options based on
-        the interactive table below.
+      </p>
+      <p>
+        This file won't necessarily reflect dynamic sorting or filtering
+        options based on the interactive table below.
       </p>
       <table id="table" class="table table-hover"></table>
       <div id="loading" class="spinner">
@@ -34,9 +35,12 @@
                         There was an error loading and rendering the \
                         interactive table. You can download the normalized \
                         TSV above and load in an external application such as \
-                        Microsoft Excel or Google Sheets.<br><br>Please \
-                        copy-and-paste the following error messages when \
-                        reporting this error:\
+                        Microsoft Excel or Google Sheets. The metadata file \
+                        can also be used anywhere metadata is accepted in \
+                        QIIME 2.<br><br>Please copy-and-paste the following \
+                        error messages when reporting this error (please be \
+                        aware that the content of your metadata is included \
+                        in these messages):\
                         </p>');
         helpMsg.append('<pre><code>' + errors.join('\n\n//----\n\n') + '</code></pre>');
         loading.replaceWith(helpMsg);
