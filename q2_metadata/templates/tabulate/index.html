@@ -3,8 +3,23 @@
 {% block content %}
   <div class="row">
     <div class="col-lg-12">
-      <p>Export options:</p>
-      <table id='table' class='table table-hover'></table>
+      <p>
+        <a href="metadata.tsv" target="_blank" rel="noopener noreferrer" class="btn btn-default">
+          Download metadata TSV file
+        </a>
+      </p>
+      <p>
+        This file won't necessarily reflect dynamic sorting or filtering
+        options based on the interactive table below.
+      </p>
+      <table id="table" class="table table-hover"></table>
+      <div id="loading" class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+      </div>
     </div>
   </div>
   <link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
@@ -12,13 +27,39 @@
 
   <script type="text/javascript">
     $(document).ready(function(){
-      var data = JSON.parse('{{ table }}');
+      var loading = $('#loading');
+
+      function renderErrorMsg(errors) {
+        var helpMsg = $('<div></div>');
+        helpMsg.append('<p class="alert alert-danger">\
+                        There was an error loading and rendering the \
+                        interactive table. You can download the normalized \
+                        TSV above and load in an external application such as \
+                        Microsoft Excel or Google Sheets. The metadata file \
+                        can also be used anywhere metadata is accepted in \
+                        QIIME 2.<br><br>Please copy-and-paste the following \
+                        error messages when reporting this error (please be \
+                        aware that the content of your metadata is included \
+                        in these messages):\
+                        </p>');
+        helpMsg.append('<pre><code>' + errors.join('\n\n//----\n\n') + '</code></pre>');
+        loading.replaceWith(helpMsg);
+      }
+
+      try {
+        var tableStr = '{{ table }}';
+        var data = JSON.parse(tableStr);
+      } catch(error) {
+        renderErrorMsg([error, tableStr]);
+        console.error(error, tableStr);
+      }
+
       // Manually set the directive label
       data.columns[0][1] = '#q2:types';
-      var filename = 'metadata';
+
+      // Construct initial table header
       var table = $('#table'), head = $('<thead></thead>'), row = $('<tr></tr>');
-      table.append(head);
-      head.append(row);
+      table.append(head), head.append(row);
       $.each(data.columns, function(i, val) {
         row.append(function() {
           var cell = '<th>' + val[0] + '<br>';
@@ -33,26 +74,103 @@
         });
       });
 
-      var cleanDirectives = function(delimiter) {
-        return function(exportData) {
-          exportData = exportData.split('\n');
-          exportData.unshift(data[0]);  // duplicate first row to stash the types directive in
-          exportData[0] = $.map(data.columns, function(c) { return '\"' + c[0] + '\"'; }).join(delimiter);
-          exportData[1] = $.map(data.columns, function(c) { return '\"' + c[1] + '\"'; }).join(delimiter);
-          return exportData.join('\n');
-        }
-      }
-
-      table.DataTable({
-        data: data.data,
-        fixedHeader: true,
-        pageLength: {{ page_size }},
-        dom: 'Bfrtip',
-        buttons: [
-          { extend: 'csv', filename: filename, text: 'TSV', fieldSeparator: '\t', extension: '.tsv', customize: cleanDirectives('\t'), },
-          { extend: 'csv', filename: filename , customize: cleanDirectives(','), },
-        ],
-      });
+      table
+        .on('init.dt', function() {
+          loading.remove();
+          console.log('Successfully loaded table!');
+        })
+        .on('error.dt', function(error, settings, techNote, message) {
+          renderErrorMsg([error, settings, techNote, message]);
+          console.error(error, settings, techNote, message);
+        })
+        .DataTable({
+          data: data.data,
+          fixedHeader: true,
+          pageLength: {{ page_size }},
+          dom: 'frtip',
+        });
     });
   </script>
+{% endblock %}
+
+{% block head %}
+<style>
+/* SPINKIT */
+
+/*
+The MIT License (MIT)
+
+Copyright (c) 2015 Tobias Ahlin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+.spinner {
+  margin: 100px auto;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.spinner > div {
+  background-color: #333;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+
+  -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  animation: sk-stretchdelay 1.2s infinite ease-in-out;
+}
+
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+
+@-webkit-keyframes sk-stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
+  20% { -webkit-transform: scaleY(1.0) }
+}
+
+@keyframes sk-stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+</style>
 {% endblock %}
