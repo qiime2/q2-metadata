@@ -25,33 +25,21 @@
   <link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
   <script type="text/javascript" src="./js/datatables.min.js"></script>
 
+  {% set loading_selector = '#loading' %}
+  {% include 'js-error-handler.html' %}
   <script type="text/javascript">
     $(document).ready(function(){
       var loading = $('#loading');
-
-      function renderErrorMsg(errors) {
-        var helpMsg = $('<div></div>');
-        helpMsg.append('<p class="alert alert-danger">\
-                        There was an error loading and rendering the \
-                        interactive table. You can download the normalized \
-                        TSV above and load in an external application such as \
-                        Microsoft Excel or Google Sheets. The metadata file \
-                        can also be used anywhere metadata is accepted in \
-                        QIIME 2.<br><br>Please copy-and-paste the following \
-                        error messages when reporting this error (please be \
-                        aware that the content of your metadata is included \
-                        in these messages):\
-                        </p>');
-        helpMsg.append('<pre><code>' + errors.join('\n\n//----\n\n') + '</code></pre>');
-        loading.replaceWith(helpMsg);
-      }
-
+      var helpMsg = 'You can download the normalized TSV above and load in \
+                     an external application such as Microsoft Excel or \
+                     Google Sheets. The metadata file can also be used \
+                     anywhere metadata is accepted in QIIME 2.';
       try {
         var tableStr = '{{ table }}';
         var data = JSON.parse(tableStr);
       } catch(error) {
-        renderErrorMsg([error, tableStr]);
-        console.error(error, tableStr);
+        // From include 'js-error-handler.html'
+        handleErrors([error, tableStr], loading, helpMsg);
       }
 
       // Manually set the directive label
@@ -80,8 +68,8 @@
           console.log('Successfully loaded table!');
         })
         .on('error.dt', function(error, settings, techNote, message) {
-          renderErrorMsg([error, settings, techNote, message]);
-          console.error(error, settings, techNote, message);
+          // From 'js-error-handler.html'
+          handleErrors([error, settings, techNote, message], loading, helpMsg);
         })
         .DataTable({
           data: data.data,
