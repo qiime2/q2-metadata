@@ -31,15 +31,14 @@ plugin.methods.register_function(
     function=distance_matrix,
     inputs={},
     parameters={'metadata': MetadataColumn[Numeric]},
-    parameter_descriptions={'metadata': 'Numeric metadata column to compute '
-                                        'pairwise Euclidean distances from'},
+    parameter_descriptions={
+        'metadata': 'Numeric metadata column from which to compute pairwise '
+                    'Euclidean distances'},
     outputs=[('distance_matrix', DistanceMatrix)],
     name='Create a distance matrix from a numeric Metadata column',
     description='Create a distance matrix from a numeric metadata column. '
                 'The Euclidean distance is computed between each pair of '
-                'samples or features in the column.\n\n'
-                'Tip: the distance matrix produced by this method can be used '
-                'as input to the Mantel test available in `q2-diversity`.'
+                'samples or features in the column.'
 )
 
 plugin.visualizers.register_function(
