@@ -27,6 +27,7 @@
 
   {% set loading_selector = '#loading' %}
   {% include 'js-error-handler.html' %}
+  <script id="data" type="application/json">{{ table }}</script>
   <script type="text/javascript">
     $(document).ready(function(){
       var loading = $('#loading');
@@ -34,12 +35,13 @@
                      an external application such as Microsoft Excel or \
                      Google Sheets. The metadata file can also be used \
                      anywhere metadata is accepted in QIIME 2.';
+      // Don't let the default error handler pick this error up,
+      // since we want to supply our own error message.
       try {
-        var tableStr = '{{ table }}';
-        var data = JSON.parse(tableStr);
+        var data = JSON.parse(document.getElementById('data').innerHTML);
       } catch(error) {
         // From include 'js-error-handler.html'
-        handleErrors([error, tableStr], loading, helpMsg);
+        handleErrors([error], loading, helpMsg);
       }
 
       // Manually set the directive label
