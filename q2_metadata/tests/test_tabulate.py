@@ -99,27 +99,6 @@ class TabulateTests(TestCase):
             with self.assertRaisesRegex(ValueError, 'less than one'):
                 tabulate(output_dir, md, -1)
 
-    def test_single_quotes(self):
-        index = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
-        data = ['\'1.0\'', '\'2.0\'', '\'3.0\'']
-        md = qiime2.Metadata(pd.DataFrame({'foo': data}, index=index,
-                                          dtype=object))
-
-        with tempfile.TemporaryDirectory() as output_dir:
-            tabulate(output_dir, md)
-            index_fp = os.path.join(output_dir, 'index.html')
-            self.assertTrue(os.path.exists(index_fp))
-
-            viz = open(index_fp).read()
-
-            self.assertTrue('pageLength: 100' in viz)
-            self.assertTrue('"columns":[["id",""],["foo","categorical"]]'
-                            in viz)
-            self.assertTrue(all(i in viz for i in index))
-            unicodified = [r'\u00271.0\u0027', r'\u00272.0\u0027',
-                           r'\u00273.0\u0027']
-            self.assertTrue(all(val in viz for val in unicodified))
-
 
 if __name__ == "__main__":
     main()
