@@ -99,5 +99,6 @@ class TabulateTests(TestCase):
             with self.assertRaisesRegex(ValueError, 'less than one'):
                 tabulate(output_dir, md, -1)
 
+
 if __name__ == "__main__":
     main()
