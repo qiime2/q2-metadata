@@ -20,7 +20,7 @@ TEMPLATES = pkg_resources.resource_filename('q2_metadata', 'templates')
 
 
 def tabulate(output_dir: str, input: qiime2.Metadata,
-             page_size: int=100) -> None:
+             page_size: int = 100) -> None:
     if page_size < 1:
         raise ValueError('Cannot render less than one record per page.')
 
