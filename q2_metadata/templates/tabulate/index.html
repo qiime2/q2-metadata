@@ -12,7 +12,7 @@
         This file won't necessarily reflect dynamic sorting or filtering
         options based on the interactive table below.
       </p>
-      <table id="table" class="table table-hover"></table>
+      <table id="table" class="table table-hover table-striped table-bordered"></table>
       <div id="loading" class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -162,17 +162,5 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     -webkit-transform: scaleY(1.0);
   }
 }
-  
-table.dataTable thead .sorting:after,
-table.dataTable thead .sorting_asc:after,
-table.dataTable thead .sorting_desc:after,
-table.dataTable thead .sorting_asc_disabled:after,
-table.dataTable thead .sorting_desc_disabled:after {
-	bottom: 8px;
-	padding-left: 3px !important;
-	display: inline-block !important;
-	font-family: 'Glyphicons Halflings';
-	opacity: 0.5
-}  
 </style>
 {% endblock %}
