@@ -47,4 +47,4 @@ jobs:
       with:
         package-name: q2-metadata
         build-target: staging
-        additional-tests: py.test --pyargs q2_metadata
+        additional-tests: py.test --pyargs q2_metadata --capture=tee-sys
