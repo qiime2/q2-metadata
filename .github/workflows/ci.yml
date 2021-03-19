@@ -52,3 +52,4 @@ jobs:
         package-name: q2-metadata
         build-target: staging
         additional-tests: py.test --pyargs q2_metadata
+        library-token: ${{ secrets.LIBRARY_TOKEN }}
