@@ -19,7 +19,7 @@ requirements:
   run:
     - python {{ python }}
     - numpy
-    - scipy
+    - scipy {{ scipy }}
     - pandas {{ pandas }}
     - scikit-bio {{ scikit_bio }}
     - qiime2 {{ qiime2_epoch }}.*
