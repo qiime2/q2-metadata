@@ -27,9 +27,9 @@ def random_groups(metadata: qiime2.CategoricalMetadataColumn,
     df[first_column_id] = df[input_column_name].map(value_mapping)
 
     df[first_column_id] = \
-            np.random.permutation(df[first_column_id].values)
+        np.random.permutation(df[first_column_id].values)
 
-    for i in range(1,n_columns):
+    for i in range(1, n_columns):
         column_id = '%s%d' % (column_name_prefix, i)
         df[column_id] = \
             np.random.permutation(df[first_column_id].values)

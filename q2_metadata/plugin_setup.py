@@ -8,7 +8,7 @@
 
 import qiime2.plugin
 from qiime2.plugin import (MetadataColumn, Numeric, SemanticType, Categorical,
-                           Int, Str)
+                           Int, Str, ValidationError)
 import qiime2.plugin.model as model
 
 import q2_metadata
@@ -70,6 +70,7 @@ ArtificialGrouping = \
 
 plugin.register_semantic_types(ArtificialGrouping)
 
+
 class ArtificialGroupingFormat(model.TextFileFormat):
     def _validate(self, n_records=None):
         with self.open() as fh:
@@ -103,6 +104,7 @@ plugin.register_semantic_type_to_format(
     SampleData[ArtificialGrouping],
     artifact_format=ArtificialGroupingDirectoryFormat)
 
+
 @plugin.register_transformer
 def _1(df: pd.DataFrame) -> (ArtificialGroupingFormat):
     ff = ArtificialGroupingFormat()
@@ -110,13 +112,14 @@ def _1(df: pd.DataFrame) -> (ArtificialGroupingFormat):
         df.to_csv(fh, sep='\t', header=True)
     return ff
 
+
 @plugin.register_transformer
 def _2(ff: ArtificialGroupingFormat) -> (qiime2.Metadata):
-
     with ff.open() as fh:
         df = pd.read_csv(fh, sep='\t', header=0, dtype='str', index_col=0)
         df.index.name = 'sample-id'
         return qiime2.Metadata(df)
+
 
 plugin.methods.register_function(
     function=random_groups,

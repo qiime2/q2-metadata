@@ -9,7 +9,6 @@
 import unittest
 
 import pandas as pd
-import numpy as np
 import qiime2
 
 from q2_metadata import random_groups
@@ -31,7 +30,7 @@ class RandomGroupsTests(unittest.TestCase):
         obs = random_groups(md, n_columns=1,
                             column_name_prefix='random-grouping-',
                             column_value_prefix='fake-group-')
-        self.assertEqual(obs.shape, (4,1))
+        self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
         self.assertFalse('groups' in obs.columns)
@@ -64,7 +63,7 @@ class RandomGroupsTests(unittest.TestCase):
 
     def test_random_groups_shape_33(self):
         md = qiime2.CategoricalMetadataColumn(
-            pd.Series(['a', 'b', 'c','a', 'b', 'c','a', 'b', 'c'],
+            pd.Series(['a', 'b', 'c', 'a', 'b', 'c', 'a', 'b', 'c'],
                       name='groups',
                       index=pd.Index(['sample1', 'sample2', 'sample3',
                                       'samplea', 'sampleb', 'sc',
@@ -76,7 +75,7 @@ class RandomGroupsTests(unittest.TestCase):
         obs = random_groups(md, n_columns=3,
                             column_name_prefix='random-grouping-',
                             column_value_prefix='fake-group-')
-        self.assertEqual(obs.shape, (9,3))
+        self.assertEqual(obs.shape, (9, 3))
 
         # original column name should not be in the result
         self.assertFalse('groups' in obs.columns)
@@ -88,8 +87,9 @@ class RandomGroupsTests(unittest.TestCase):
             # correct number of groups in the new column
             self.assertEqual(len(obs[column_id].unique()), 3)
 
-            self.assertEqual(set(obs[column_id].unique()),
-                            {'fake-group-1', 'fake-group-0', 'fake-group-2'})
+            self.assertEqual(
+                set(obs[column_id].unique()),
+                {'fake-group-1', 'fake-group-0', 'fake-group-2'})
 
         # randomization of key/value associations is occurring
         random_check1 = []
@@ -105,18 +105,21 @@ class RandomGroupsTests(unittest.TestCase):
             random_check3.append(
                 list(obs['random-grouping-1']) ==
                 list(obs['random-grouping-2']))
-        self.assertIn(False, random_check1,
-                    "All random groupings in %d iterations were "
-                    "identicial, suggesting that values are not "
-                    "randomly assigned." % self.n_iterations)
-        self.assertIn(False, random_check2,
-                    "All random groupings in %d iterations were "
-                    "identicial, suggesting that values are not "
-                    "randomly assigned." % self.n_iterations)
-        self.assertIn(False, random_check3,
-                    "All random groupings in %d iterations were "
-                    "identicial, suggesting that values are not "
-                    "randomly assigned." % self.n_iterations)
+        self.assertIn(
+            False, random_check1,
+            "All random groupings in %d iterations were "
+            "identicial, suggesting that values are not "
+            "randomly assigned." % self.n_iterations)
+        self.assertIn(
+            False, random_check2,
+            "All random groupings in %d iterations were "
+            "identicial, suggesting that values are not "
+            "randomly assigned." % self.n_iterations)
+        self.assertIn(
+            False, random_check3,
+            "All random groupings in %d iterations were "
+            "identicial, suggesting that values are not "
+            "randomly assigned." % self.n_iterations)
 
     def test_random_groups_alt_input_column_name(self):
         md = qiime2.CategoricalMetadataColumn(
@@ -129,7 +132,7 @@ class RandomGroupsTests(unittest.TestCase):
         obs = random_groups(md, n_columns=1,
                             column_name_prefix='random-grouping-',
                             column_value_prefix='fake-group-')
-        self.assertEqual(obs.shape, (4,1))
+        self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
         self.assertFalse('xyz' in obs.columns)
@@ -153,7 +156,7 @@ class RandomGroupsTests(unittest.TestCase):
         obs = random_groups(md, n_columns=1,
                             column_name_prefix='1',
                             column_value_prefix='fake-group-')
-        self.assertEqual(obs.shape, (4,1))
+        self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
         self.assertFalse('groups' in obs.columns)
@@ -177,7 +180,7 @@ class RandomGroupsTests(unittest.TestCase):
         obs = random_groups(md, n_columns=1,
                             column_name_prefix='random-grouping-',
                             column_value_prefix='1')
-        self.assertEqual(obs.shape, (4,1))
+        self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
         self.assertFalse('groups' in obs.columns)
@@ -187,5 +190,6 @@ class RandomGroupsTests(unittest.TestCase):
         self.assertEqual(len(obs['random-grouping-0'].unique()), 2)
 
         # correct group names in new column
-        self.assertEqual(set(obs['random-grouping-0'].unique()),
-                         {'11', '10'})
+        self.assertEqual(
+            set(obs['random-grouping-0'].unique()),
+            {'11', '10'})
