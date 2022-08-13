@@ -11,10 +11,10 @@ import numpy as np
 import pandas as pd
 
 
-def random_groups(metadata: qiime2.CategoricalMetadataColumn,
-                  n_columns: int = 3,
-                  column_name_prefix: str = 'random-grouping-',
-                  column_value_prefix: str = 'fake-group-') -> pd.DataFrame:
+def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
+                   n_columns: int = 3,
+                   column_name_prefix: str = 'shuffled.grouping.',
+                   column_value_prefix: str = 'fake.group.') -> pd.DataFrame:
 
     input_column_name = metadata.name
     df = metadata.to_dataframe()

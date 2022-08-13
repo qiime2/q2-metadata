@@ -13,7 +13,7 @@ import qiime2.plugin.model as model
 
 import q2_metadata
 
-from q2_metadata import tabulate, distance_matrix, random_groups
+from q2_metadata import tabulate, distance_matrix, shuffle_groups
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
 
@@ -72,25 +72,18 @@ plugin.register_semantic_types(ArtificialGrouping)
 
 
 class ArtificialGroupingFormat(model.TextFileFormat):
-    def _validate(self, n_records=None):
-        with self.open() as fh:
-            # validate header
-            line = fh.readline()
-            line.startswith('sample-id')
+    def validate(self, *args):
+        try:
+            md = qiime2.Metadata.load(str(self))
+        except qiime2.metadata.MetadataFileError as md_exc:
+            raise ValidationError(md_exc) from md_exc
 
-            # validate body
-            n_header_fields = len(line.split('\t'))
-            for line_number, line in enumerate(fh, start=2):
-                n_fields = len(line.split('\t'))
-                if n_fields != n_header_fields:
-                    raise ValidationError(
-                        'Inconsistent number of tab-separated text fields.')
-                if n_records is not None and (line_number - 1) >= n_records:
-                    break
+        if md.column_count == 0:
+            raise ValidationError('Format must contain at least 1 column')
 
-    def _validate_(self, level):
-        record_count_map = {'min': 5, 'max': None}
-        self._validate(record_count_map[level])
+        filtered_md = md.filter_columns(column_type='categorical')
+        if filtered_md.column_count != md.column_count:
+            raise ValidationError('Must only contain categorical values.')
 
 
 ArtificialGroupingDirectoryFormat = model.SingleFileDirectoryFormat(
@@ -122,28 +115,29 @@ def _2(ff: ArtificialGroupingFormat) -> (qiime2.Metadata):
 
 
 plugin.methods.register_function(
-    function=random_groups,
+    function=shuffle_groups,
     inputs={},
     parameters={'metadata': MetadataColumn[Categorical],
                 'n_columns': Int,
                 'column_name_prefix': Str,
                 'column_value_prefix': Str},
     parameter_descriptions={
-        'metadata': ('Categorical metadata column to model randomized '
-                     'metadata on.'),
-        'n_columns': 'The number of randomized metadata columns to create.',
-        'column_name_prefix': ('Prefix to use in naming the randomized '
+        'metadata': ('Categorical metadata column to shuffle.'),
+        'n_columns': 'The number of shuffled metadata columns to create.',
+        'column_name_prefix': ('Prefix to use in naming the shuffled '
                                'metadata columns.'),
-        'column_value_prefix': ('Prefix to use in name the values in the '
-                                'randomized metadata columns.')},
+        'column_value_prefix': ('Prefix to use in naming the values in the '
+                                'shuffled metadata columns.')},
     output_descriptions={
-        'random_groupings': 'Randomized metadata columns'
-    },
-    outputs=[('random_groupings', SampleData[ArtificialGrouping])],
-    name='Create randomized categorical sample metadata column(s).',
-    description=('Create one or more randomized categorical sample metadata '
-                 'columns, with the number of groups and the count of '
-                 'samples assigned to each group matching that of the '
-                 'input metadata column. These data will be written to '
-                 'an artifact that can be used as sample metadata.')
+        'shuffled_groups': 'Randomized metadata columns'},
+    outputs=[('shuffled_groups', SampleData[ArtificialGrouping])],
+    name='Shuffle values in a categorical sample metadata column.',
+    description=('Create one or more categorical sample metadata '
+                 'columns by shuffling the values in an input metadata '
+                 'column. To avoid confusion, the column name and values '
+                 'will be derived from the provided prefixes. The number of '
+                 'different values (or groups), and the counts of each value, '
+                 'will match the input metadata column but the association of '
+                 'values with sample ids will be random. These data will be '
+                 'written to an artifact that can be used as sample metadata.')
 )
