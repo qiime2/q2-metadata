@@ -101,17 +101,14 @@ plugin.register_semantic_type_to_format(
 @plugin.register_transformer
 def _1(df: pd.DataFrame) -> (ArtificialGroupingFormat):
     ff = ArtificialGroupingFormat()
-    with ff.open() as fh:
-        df.to_csv(fh, sep='\t', header=True)
+    md = qiime2.Metadata(df)
+    md.save(str(ff))
     return ff
 
 
 @plugin.register_transformer
 def _2(ff: ArtificialGroupingFormat) -> (qiime2.Metadata):
-    with ff.open() as fh:
-        df = pd.read_csv(fh, sep='\t', header=0, dtype='str', index_col=0)
-        df.index.name = 'sample-id'
-        return qiime2.Metadata(df)
+    return qiime2.Metadata.load(str(ff))
 
 
 plugin.methods.register_function(
