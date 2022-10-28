@@ -62,6 +62,7 @@ plugin.visualizers.register_function(
                 'exporting to common file formats.',
     examples={
         'basic_tabulate_usage': _examples.tabulate_example,
+        'tabulate_multiple_files': _examples.tabulate_multiple_files_example
     },
 )
 
