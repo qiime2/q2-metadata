@@ -12,8 +12,9 @@ from qiime2.plugin import (MetadataColumn, Numeric, SemanticType, Categorical,
 import qiime2.plugin.model as model
 
 import q2_metadata
-
+import q2_metadata._examples as ex
 from q2_metadata import tabulate, distance_matrix, shuffle_groups
+
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
 
@@ -63,6 +64,9 @@ plugin.visualizers.register_function(
     description='Generate a tabular view of Metadata. The output '
                 'visualization supports interactive filtering, sorting, and '
                 'exporting to common file formats.',
+    examples={
+        'basic_tabulate_usage': ex.tabulate_example,
+    },
 )
 
 ArtificialGrouping = \
