@@ -12,6 +12,7 @@ import tempfile
 
 import pandas as pd
 import qiime2
+from qiime2.plugin.testing import TestPluginBase
 
 from q2_metadata import tabulate
 
@@ -98,6 +99,13 @@ class TabulateTests(TestCase):
         with tempfile.TemporaryDirectory() as output_dir:
             with self.assertRaisesRegex(ValueError, 'less than one'):
                 tabulate(output_dir, md, -1)
+
+
+class TestUsageExamples(TestPluginBase):
+    package = 'q2_metadata.tests'
+
+    def test_examples(self):
+        self.execute_examples()
 
 
 if __name__ == "__main__":

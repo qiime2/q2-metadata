@@ -6,23 +6,20 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-import qiime2.plugin
-from qiime2.plugin import (MetadataColumn, Numeric, SemanticType, Categorical,
-                           Int, Str, ValidationError)
-import qiime2.plugin.model as model
-
-import q2_metadata
-
-from q2_metadata import tabulate, distance_matrix, shuffle_groups
+import pandas as pd
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
+import qiime2.plugin
+from qiime2.plugin import (
+    Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
+    Str, ValidationError,
+)
 
-import pandas as pd
+from . import _examples, tabulate, distance_matrix, shuffle_groups, __version__
 
-
-plugin = qiime2.plugin.Plugin(
+plugin = Plugin(
     name='metadata',
-    version=q2_metadata.__version__,
+    version=__version__,
     website='https://github.com/qiime2/q2-metadata',
     package='q2_metadata',
     user_support_text=None,
@@ -63,6 +60,10 @@ plugin.visualizers.register_function(
     description='Generate a tabular view of Metadata. The output '
                 'visualization supports interactive filtering, sorting, and '
                 'exporting to common file formats.',
+    examples={
+        'basic_tabulate_usage': _examples.tabulate_example,
+        'tabulate_multiple_files': _examples.tabulate_multiple_files_example
+    },
 )
 
 ArtificialGrouping = \
