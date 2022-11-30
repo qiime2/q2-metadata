@@ -8,13 +8,14 @@
 
 import qiime2
 
-epoch = qiime2.__release__
-m_p_base = f'https://docs.qiime2.org/{epoch}/data/tutorials/moving-pictures/'
-stats_url = m_p_base + 'demux-filter-stats.qza'
-faith_pd_url = m_p_base + 'core-metrics-results/faith_pd_vector.qza'
 
-metadata_url = f'https://data.qiime2.org/{epoch}/tutorials/moving-pictures/' \
-    'sample_metadata.tsv'
+stats_url = ('https://data.qiime2.org/usage-examples/'
+             'moving-pictures/demux-filter-stats.qza')
+faith_pd_url = ('https://data.qiime2.org/usage-examples/moving-pictures/'
+                'core-metrics-results/faith_pd_vector.qza')
+
+metadata_url = (f'https://data.qiime2.org/{qiime2.__release__}/tutorials/'
+                'moving-pictures/sample_metadata.tsv')
 
 
 def tabulate_example(use):
