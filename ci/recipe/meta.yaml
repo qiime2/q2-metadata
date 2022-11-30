@@ -25,12 +25,14 @@ requirements:
     - qiime2 {{ qiime2_epoch }}.*
     - q2templates {{ qiime2_epoch }}.*
     - q2-types {{ qiime2_epoch }}.*
+    - q2-quality-filter {{ qiime2_epoch }}.*
 
 test:
   requires:
     - qiime2 >={{ qiime2 }}
     - q2templates >={{ q2templates }}
     - q2-types >={{ q2_types }}
+    - q2-quality-filter >={{ q2_quality_filter }}
     - pytest
 
   imports:
