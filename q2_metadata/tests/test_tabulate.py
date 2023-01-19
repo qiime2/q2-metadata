@@ -12,7 +12,6 @@ import tempfile
 
 import pandas as pd
 import qiime2
-from qiime2.plugin.testing import TestPluginBase
 
 from q2_metadata import tabulate
 
