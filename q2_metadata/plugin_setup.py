@@ -15,7 +15,7 @@ from qiime2.plugin import (
     Str, ValidationError,
 )
 
-from . import _examples, tabulate, distance_matrix, shuffle_groups, __version__
+from . import tabulate, distance_matrix, shuffle_groups, __version__
 
 plugin = Plugin(
     name='metadata',
@@ -60,10 +60,6 @@ plugin.visualizers.register_function(
     description='Generate a tabular view of Metadata. The output '
                 'visualization supports interactive filtering, sorting, and '
                 'exporting to common file formats.',
-    examples={
-        'basic_tabulate_usage': _examples.tabulate_example,
-        'tabulate_multiple_files': _examples.tabulate_multiple_files_example
-    },
 )
 
 ArtificialGrouping = \

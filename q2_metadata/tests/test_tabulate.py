@@ -101,12 +101,5 @@ class TabulateTests(TestCase):
                 tabulate(output_dir, md, -1)
 
 
-class TestUsageExamples(TestPluginBase):
-    package = 'q2_metadata.tests'
-
-    def test_examples(self):
-        self.execute_examples()
-
-
 if __name__ == "__main__":
     main()
