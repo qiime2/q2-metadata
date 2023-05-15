@@ -37,6 +37,9 @@ test:
     - q2_metadata
     - qiime2.plugins.metadata
 
+  commands:
+    - py.test --pyargs q2_metadata
+
 about:
   home: https://qiime2.org
   license: BSD-3-Clause
