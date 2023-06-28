@@ -12,7 +12,7 @@ from q2_types.sample_data import SampleData
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, ValidationError,
+    Str, Bool, ValidationError,
 )
 
 from . import tabulate, distance_matrix, shuffle_groups, __version__
@@ -114,14 +114,20 @@ plugin.methods.register_function(
     parameters={'metadata': MetadataColumn[Categorical],
                 'n_columns': Int,
                 'column_name_prefix': Str,
-                'column_value_prefix': Str},
+                'column_value_prefix': Str,
+                'sample_size': Int,
+                'encode_sample_size': Bool
+                },
     parameter_descriptions={
         'metadata': ('Categorical metadata column to shuffle.'),
         'n_columns': 'The number of shuffled metadata columns to create.',
         'column_name_prefix': ('Prefix to use in naming the shuffled '
                                'metadata columns.'),
         'column_value_prefix': ('Prefix to use in naming the values in the '
-                                'shuffled metadata columns.')},
+                                'shuffled metadata columns.'),
+        'sample_size': ('The number of samples in metadata column, default is 1'),
+        'encode_sample_size': ('If true, sample size will be encoded in column id'),
+        },
     output_descriptions={
         'shuffled_groups': 'Randomized metadata columns'},
     outputs=[('shuffled_groups', SampleData[ArtificialGrouping])],
