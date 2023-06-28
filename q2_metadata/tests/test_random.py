@@ -194,7 +194,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
-        
+
     def test_shuffle_groups_sample_size_columnid_flag_no_input(self):
         md = qiime2.CategoricalMetadataColumn(
             pd.Series(['a', 'b', 'a', 'b'], name='groups',
@@ -219,7 +219,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
-        
+
     def test_shuffle_groups_sample_size_columnid_flag_true(self):
         md = qiime2.CategoricalMetadataColumn(
             pd.Series(['a', 'b', 'a', 'b'], name='groups',
@@ -246,7 +246,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
-        
+
     def test_shuffle_groups_sample_size_columnid_flag_false(self):
         md = qiime2.CategoricalMetadataColumn(
             pd.Series(['a', 'b', 'a', 'b'], name='groups',
@@ -273,5 +273,3 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
-    
-    

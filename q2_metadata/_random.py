@@ -36,8 +36,8 @@ def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
         column_id = '%s%d' % (column_name_prefix, i)
         df[column_id] = \
             np.random.permutation(df[first_column_id].values)
-        
-        if encode_sample_size == True:
+
+        if encode_sample_size is True:
             column_id.append(sample_size)
 
     df = df.drop(input_column_name, axis=1)
