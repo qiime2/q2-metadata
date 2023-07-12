@@ -6,13 +6,10 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from ._tabulate import tabulate
-from ._distance import distance_matrix
-from ._random import shuffle_groups
-from ._merge import merge
-from ._version import get_versions
+import qiime2
+import numpy as np
+import pandas as pd
 
-__version__ = get_versions()['version']
-del get_versions
 
-__all__ = ['tabulate', 'distance_matrix', 'shuffle_groups', 'merge']
+def merge(metadata: qiime2.Metadata) -> pd.DataFrame:
+    raise NotImplementedError
