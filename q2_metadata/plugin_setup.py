@@ -9,13 +9,14 @@
 import pandas as pd
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
+from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, ValidationError,
+    Str, ValidationError, Metadata
 )
 
-from . import tabulate, distance_matrix, shuffle_groups, __version__
+from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
 
 plugin = Plugin(
     name='metadata',
@@ -134,4 +135,24 @@ plugin.methods.register_function(
                  'will match the input metadata column but the association of '
                  'values with sample ids will be random. These data will be '
                  'written to an artifact that can be used as sample metadata.')
+)
+
+
+plugin.methods.register_function(
+    function=merge,
+    inputs={},
+    parameters={'metadata1': Metadata,
+                'metadata2': Metadata},
+    parameter_descriptions={
+        'metadata1': '',
+        'metadata2': ''
+    },
+    outputs=[('merged_metadata', ImmutableMetadata)],
+    output_descriptions={
+        'merged_metadata': ''
+    },
+    name='Merge metadata',
+    description=('Merge metadata which contains overlapping ids, overlapping '
+                 'columns, or neither, but not both overlapping ids and '
+                 'overlapping columns.')
 )
