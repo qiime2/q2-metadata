@@ -49,7 +49,6 @@ class MergeTests(unittest.TestCase):
                                merge, md1, md3)
 
     def test_merge_all_samples_overlapping(self):
-        # merge 2 metadata
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
@@ -108,7 +107,6 @@ class MergeTests(unittest.TestCase):
         self.assertEqual(obs1, exp1)
 
     def test_merge_all_columns_overlapping(self):
-        # merge 2 metadata
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
@@ -173,7 +171,6 @@ class MergeTests(unittest.TestCase):
         self.assertEqual(obs1, exp1)
 
     def test_merge_no_samples_or_columns_overlapping(self):
-        # merge 2 metadata
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],

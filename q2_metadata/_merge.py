@@ -13,7 +13,7 @@ import pandas as pd
 def merge(metadata1: qiime2.Metadata,
           metadata2: qiime2.Metadata) -> qiime2.Metadata:
     # Ultimately it would make sense for this action to take
-    # List[qiime2.Metadata] as input, but this isn't possible right now as
+    # List[qiime2.Metadata] as input, but this isn't possible right now
     overlapping_ids = set(metadata1.ids) & set(metadata2.ids)
     overlapping_columns = set(metadata1.columns) & set(metadata2.columns)
     n_overlapping_ids = len(overlapping_ids)
