@@ -23,7 +23,7 @@ class MergeTests(unittest.TestCase):
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data2 = [['a', 'd', 'h'],
@@ -31,24 +31,22 @@ class MergeTests(unittest.TestCase):
                  ['c', 'f', 'j']]
 
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         self.assertRaisesRegex(ValueError,
                                "3 overl.*ids.*sample1.*3 overl.*col.*col1",
                                merge, md1, md2)
-
 
         index3 = pd.Index(['sample4', 'sample5', 'sample1'], name='id')
         data3 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md3 = qiime2.Metadata(pd.DataFrame(data3, index=index3, dtype=object,
-                                          columns=['col4', 'col5', 'col1']))
+                                           columns=['col4', 'col5', 'col1']))
 
         self.assertRaisesRegex(ValueError,
                                "1 overl.*ids.*sample1.*1 overl.*col.*col1",
                                merge, md1, md3)
-
 
     def test_merge_all_samples_overlapping(self):
         # merge 2 metadata
@@ -57,16 +55,16 @@ class MergeTests(unittest.TestCase):
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data2 = [['k', 'n', 'q'],
                  ['l', 'o', 'r'],
                  ['m', 'p', 's']]
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col4', 'col5', 'col6']))
+                                           columns=['col4', 'col5', 'col6']))
 
-        obs1 = qiime2.Metadata(merge(md1, md2))
+        obs1 = merge(md1, md2)
 
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data_exp1 = [['a', 'd', 'h', 'k', 'n', 'q'],
@@ -79,23 +77,22 @@ class MergeTests(unittest.TestCase):
 
         self.assertEqual(obs1, exp1)
 
-
     def test_merge_some_samples_overlapping(self):
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample1', 'sample2', 'sample4'], name='id')
         data2 = [['k', 'n'],
                  ['l', 'o'],
                  ['m', 'p']]
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col4', 'col5']))
+                                           columns=['col4', 'col5']))
 
-        obs1 = qiime2.Metadata(merge(md1, md2))
+        obs1 = merge(md1, md2)
 
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3', 'sample4'],
                               name='id')
@@ -117,16 +114,16 @@ class MergeTests(unittest.TestCase):
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='id')
         data2 = [['k', 'n', 'q'],
                  ['l', 'o', 'r'],
                  ['m', 'p', 's']]
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
-        obs1 = qiime2.Metadata(merge(md1, md2))
+        obs1 = merge(md1, md2)
         print(obs1.to_dataframe())
 
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3',
@@ -150,16 +147,16 @@ class MergeTests(unittest.TestCase):
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='id')
         data2 = [['k', 'n', 'q'],
                  ['l', 'o', 'r'],
                  ['m', 'p', 's']]
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col1', 'col2', 'col4']))
+                                           columns=['col1', 'col2', 'col4']))
 
-        obs1 = qiime2.Metadata(merge(md1, md2))
+        obs1 = merge(md1, md2)
 
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3',
                                'sample4', 'sample5', 'sample6'], name='id')
@@ -182,16 +179,16 @@ class MergeTests(unittest.TestCase):
                  ['b', 'e', 'i'],
                  ['c', 'f', 'j']]
         md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
-                                          columns=['col1', 'col2', 'col3']))
+                                           columns=['col1', 'col2', 'col3']))
 
         index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='id')
         data2 = [['k', 'n', 'q'],
                  ['l', 'o', 'r'],
                  ['m', 'p', 's']]
         md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
-                                          columns=['col4', 'col5', 'col6']))
+                                           columns=['col4', 'col5', 'col6']))
 
-        obs1 = qiime2.Metadata(merge(md1, md2))
+        obs1 = merge(md1, md2)
 
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3',
                                'sample4', 'sample5', 'sample6'], name='id')

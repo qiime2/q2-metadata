@@ -7,7 +7,6 @@
 # ----------------------------------------------------------------------------
 
 import qiime2
-import numpy as np
 import pandas as pd
 
 
@@ -34,12 +33,11 @@ def merge(metadata1: qiime2.Metadata,
     if n_overlapping_columns == 0:
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True)
-    else: # i.e., n_overlapping_ids == 0
+    else:  # i.e., n_overlapping_ids == 0
         result = pd.merge(df1, df2, how='outer', left_index=True,
-                          right_index=True, suffixes=('','_'))
+                          right_index=True, suffixes=('', '_'))
         for c in overlapping_columns:
             result[c] = result[c].combine_first(result[f"{c}_"])
             result = result.drop(columns=[f"{c}_"])
 
     return qiime2.Metadata(result)
-

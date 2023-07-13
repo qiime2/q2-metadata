@@ -144,15 +144,23 @@ plugin.methods.register_function(
     parameters={'metadata1': Metadata,
                 'metadata2': Metadata},
     parameter_descriptions={
-        'metadata1': '',
-        'metadata2': ''
+        'metadata1': 'First metadata file to merge.',
+        'metadata2': 'Second metadata file to merge.'
     },
     outputs=[('merged_metadata', ImmutableMetadata)],
     output_descriptions={
-        'merged_metadata': ''
+        'merged_metadata': 'The merged metadata.'
     },
     name='Merge metadata',
-    description=('Merge metadata which contains overlapping ids, overlapping '
-                 'columns, or neither, but not both overlapping ids and '
-                 'overlapping columns.')
+    description=('Merge metadata that contains overlapping ids, overlapping '
+                 'columns, neither overlapping ids nor overlapping columns, '
+                 'but not both overlapping ids and overlapping columns. The '
+                 'result will be the union (i.e., outer join) of the '
+                 'ids and columns from the two metadata inputs.\n\nTo merge '
+                 'more than two metadata objects, run this command multiple '
+                 'times, iteratively using the output of the previous run as '
+                 'one of the metadata inputs.\n\n'
+                 'The output, an ImmutableMetadata artifact, can be used '
+                 'anywhere that a metafile file can be used, or can be '
+                 'exported to a metadata tsv file in the typical format.')
 )
