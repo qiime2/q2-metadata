@@ -204,7 +204,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='1',
+                             column_value_prefix='fake.group.',
                              )
         self.assertEqual(obs.shape, (4, 1))
 
@@ -218,7 +218,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # correct group names in new column
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
-            {'11', '10'})
+            {'fake.group.1', 'fake.group.0'})
 
     def test_shuffle_groups_sample_size_columnid_flag_true(self):
         md = qiime2.CategoricalMetadataColumn(
@@ -230,7 +230,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='1',
+                             column_value_prefix='fake.group.',
                              encode_sample_size=True)
         self.assertEqual(obs.shape, (4, 1))
 
@@ -244,7 +244,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # correct group names in new column
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
-            {'11', '10'})
+            {'fake.group.n=4.1', 'fake.group.n=4.0'})
 
     def test_shuffle_groups_sample_size_columnid_flag_false(self):
         md = qiime2.CategoricalMetadataColumn(
