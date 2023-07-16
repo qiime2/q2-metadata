@@ -14,13 +14,18 @@ import pandas as pd
 def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
                    n_columns: int = 3,
                    column_name_prefix: str = 'shuffled.grouping.',
+                   # Suggest renaming this variable to sampl_value_prefix for clarity
                    column_value_prefix: str = 'fake.group.',
-                   sample_size: int = 1,
                    encode_sample_size: bool = False
                    ) -> pd.DataFrame:
 
     input_column_name = metadata.name
     df = metadata.to_dataframe()
+
+    if encode_sample_size is True:
+        # set sample_size to the number of unique samples in the dataframe
+        sample_size = len(df[input_column_name].unique())
+        column_value_prefix = f'{column_value_prefix}n={sample_size}'
 
     value_mapping = {}
     for i, value in enumerate(df[input_column_name].unique()):
@@ -34,11 +39,10 @@ def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
 
     for i in range(1, n_columns):
         column_id = '%s%d' % (column_name_prefix, i)
+
         df[column_id] = \
             np.random.permutation(df[first_column_id].values)
 
-        if encode_sample_size is True:
-            column_id.append(sample_size)
-
     df = df.drop(input_column_name, axis=1)
+
     return df
