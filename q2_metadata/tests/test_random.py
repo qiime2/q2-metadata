@@ -205,7 +205,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         obs = shuffle_groups(md, n_columns=1,
                              column_name_prefix='shuffled.grouping.',
                              column_value_prefix='1',
-                             sample_size=4)
+                             )
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -231,7 +231,6 @@ class ShuffleGroupsTests(unittest.TestCase):
         obs = shuffle_groups(md, n_columns=1,
                              column_name_prefix='shuffled.grouping.',
                              column_value_prefix='1',
-                             sample_size=4,
                              encode_sample_size=True)
         self.assertEqual(obs.shape, (4, 1))
 
@@ -258,7 +257,6 @@ class ShuffleGroupsTests(unittest.TestCase):
         obs = shuffle_groups(md, n_columns=1,
                              column_name_prefix='shuffled.grouping.',
                              column_value_prefix='1',
-                             sample_size=4,
                              encode_sample_size=False)
         self.assertEqual(obs.shape, (4, 1))
 
