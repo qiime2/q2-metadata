@@ -244,7 +244,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # correct group names in new column
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
-            {'fake.group.n=4.1', 'fake.group.n=4.0'})
+            {'fake.group.1.n=4', 'fake.group.0.n=4'})
 
     def test_shuffle_groups_sample_size_columnid_flag_false(self):
         md = qiime2.CategoricalMetadataColumn(
