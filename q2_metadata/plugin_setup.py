@@ -115,7 +115,6 @@ plugin.methods.register_function(
                 'n_columns': Int,
                 'column_name_prefix': Str,
                 'column_value_prefix': Str,
-                'sample_size': Int,
                 'encode_sample_size': Bool
                 },
     parameter_descriptions={
@@ -125,8 +124,6 @@ plugin.methods.register_function(
                                'metadata columns.'),
         'column_value_prefix': ('Prefix to use in naming the values in the '
                                 'shuffled metadata columns.'),
-        'sample_size': ('The number of samples in metadata column,'
-                        ' default is 1'),
         'encode_sample_size': ('If true, sample size will be encoded in column'
                                ' id'),
         },
