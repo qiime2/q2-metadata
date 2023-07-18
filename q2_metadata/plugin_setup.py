@@ -124,8 +124,9 @@ plugin.methods.register_function(
                                'metadata columns.'),
         'column_value_prefix': ('Prefix to use in naming the values in the '
                                 'shuffled metadata columns.'),
-        'encode_sample_size': ('If true, sample size will be encoded in column'
-                               ' id'),
+        'encode_sample_size': ('If true, the sample size of each metadata'
+                               'group will be appended to the shuffled'
+                               'metadata column value names.'),
         },
     output_descriptions={
         'shuffled_groups': 'Randomized metadata columns'},

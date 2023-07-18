@@ -271,3 +271,37 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
+
+    def test_shuffle_groups_sample_size_equals_valuecounts(self):
+        md = qiime2.CategoricalMetadataColumn(
+            pd.Series(['a', 'b', 'b', 'b', 'a', 'b'], name='groups',
+                      index=pd.Index(['sample1', 'sample2', 'sample3', 's4',
+                                      's5', 's6'],
+                                     name='id'))
+        )
+
+        # expected number of rows and columns in result
+        obs = shuffle_groups(md, n_columns=1,
+                             column_name_prefix='shuffled.grouping.',
+                             column_value_prefix='fake.group.',
+                             encode_sample_size=True)
+        self.assertEqual(obs.shape, (6, 1))
+
+        # expected number of samples in each group in the new column
+        self.assertEqual(obs['shuffled.grouping.0'].value_counts()
+                         ['fake.group.0.n=2'], 2)
+        self.assertEqual(obs['shuffled.grouping.0'].value_counts()
+                            ['fake.group.1.n=4'], 4)
+        print(obs['shuffled.grouping.0'].value_counts())
+
+        # expected column names (the original should not be in the result)
+        self.assertFalse('groups' in obs.columns)
+        self.assertTrue('shuffled.grouping.0' in obs.columns)
+
+        # correct number of groups in the new column
+        self.assertEqual(len(obs['shuffled.grouping.0'].unique()), 2)
+
+        # correct group names in new column
+        self.assertEqual(
+            set(obs['shuffled.grouping.0'].unique()),
+            {'fake.group.1.n=4', 'fake.group.0.n=2'})
