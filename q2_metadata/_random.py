@@ -14,8 +14,6 @@ import pandas as pd
 def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
                    n_columns: int = 3,
                    md_column_name_prefix: str = 'shuffled.grouping.',
-                   # Suggest renaming this variable to sample_value_prefix for
-                   # clarity
                    column_value_prefix: str = 'fake.group.',
                    encode_sample_size: bool = False
                    ) -> pd.DataFrame:
