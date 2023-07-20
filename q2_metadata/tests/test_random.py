@@ -284,7 +284,6 @@ class ShuffleGroupsTests(unittest.TestCase):
                          ['fake.group.0.n=2'], 2)
         self.assertEqual(obs['shuffled.grouping.0'].value_counts()
                             ['fake.group.1.n=4'], 4)
-        print(obs['shuffled.grouping.0'].value_counts())
 
         # expected column names (the original should not be in the result)
         self.assertFalse('groups' in obs.columns)
