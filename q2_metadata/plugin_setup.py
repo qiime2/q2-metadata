@@ -127,7 +127,7 @@ plugin.methods.register_function(
         'encode_sample_size': ('If true, the sample size of each group'
                                ' within the selected metadata column'
                                ' will be appended to the shuffled'
-                               ' metadata column value names.'),
+                               ' metadata column values.'),
         },
     output_descriptions={
         'shuffled_groups': 'Randomized metadata columns'},
