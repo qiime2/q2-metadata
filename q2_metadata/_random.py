@@ -14,7 +14,7 @@ import pandas as pd
 def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
                    n_columns: int = 3,
                    md_column_name_prefix: str = 'shuffled.grouping.',
-                   column_value_prefix: str = 'fake.group.',
+                   md_column_values_prefix: str = 'fake.group.',
                    encode_sample_size: bool = False
                    ) -> pd.DataFrame:
 
