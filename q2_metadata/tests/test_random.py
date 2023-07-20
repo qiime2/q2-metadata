@@ -256,7 +256,7 @@ class ShuffleGroupsTests(unittest.TestCase):
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
 
-    def test_shuffle_groups_sample_size_equals_valuecounts(self):
+    def test_shuffle_groups_sample_size_equals_value_counts(self):
         md = qiime2.CategoricalMetadataColumn(
             pd.Series(['a', 'b', 'b', 'b', 'a', 'b'], name='groups',
                       index=pd.Index(['sample1', 'sample2', 'sample3', 's4',
