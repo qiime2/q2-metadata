@@ -161,6 +161,6 @@ plugin.methods.register_function(
                  'times, iteratively using the output of the previous run as '
                  'one of the metadata inputs.\n\n'
                  'The output, an ImmutableMetadata artifact, can be used '
-                 'anywhere that a metafile file can be used, or can be '
+                 'anywhere that a metadata file can be used, or can be '
                  'exported to a metadata tsv file in the typical format.')
 )
