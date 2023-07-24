@@ -25,11 +25,11 @@ def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
     value_mapping = {}
     for i, value in enumerate(df[input_column_name].unique()):
         if encode_sample_size:
-            value_mapping[value] = '%s%d%s' % (md_column_value_prefix, i,
+            value_mapping[value] = '%s%d%s' % (md_column_values_prefix, i,
                                                f'.n={group_sample_size[value]}'
                                                )
         else:
-            value_mapping[value] = '%s%d' % (md_column_value_prefix, i)
+            value_mapping[value] = '%s%d' % (md_column_values_prefix, i)
 
     first_column_id = '%s0' % md_column_name_prefix
     df[first_column_id] = df[input_column_name].map(value_mapping)

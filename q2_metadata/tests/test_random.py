@@ -29,7 +29,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.')
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -53,7 +53,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         for i in range(self.n_iterations):
             obs2 = shuffle_groups(md, n_columns=1,
                                   md_column_name_prefix='shuffled.grouping.',
-                                  md_column_value_prefix='fake.group.')
+                                  md_column_values_prefix='fake.group.')
             random_check.append(
                 list(obs['shuffled.grouping.0']) ==
                 list(obs2['shuffled.grouping.0']))
@@ -75,7 +75,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns
         obs = shuffle_groups(md, n_columns=3,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.')
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (9, 3))
 
         # original column name should not be in the result
@@ -132,7 +132,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.')
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -156,7 +156,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='1',
-                             md_column_value_prefix='fake.group.')
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -180,7 +180,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='1')
+                             md_column_values_prefix='1')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -205,7 +205,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.',
+                             md_column_values_prefix='fake.group.',
                              )
 
         # correct group names in new column
@@ -223,7 +223,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.',
+                             md_column_values_prefix='fake.group.',
                              encode_sample_size=True)
 
         # correct group names in new column
@@ -241,7 +241,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='1',
+                             md_column_values_prefix='1',
                              encode_sample_size=False)
 
         # correct group names in new column
@@ -260,7 +260,7 @@ class ShuffleGroupsTests(unittest.TestCase):
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
                              md_column_name_prefix='shuffled.grouping.',
-                             md_column_value_prefix='fake.group.',
+                             md_column_values_prefix='fake.group.',
                              encode_sample_size=True)
 
         # expected number of samples in each group in the new column
