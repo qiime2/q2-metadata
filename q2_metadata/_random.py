@@ -13,10 +13,8 @@ import pandas as pd
 
 def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
                    n_columns: int = 3,
-                   column_name_prefix: str = 'shuffled.grouping.',
-                   # Suggest renaming this variable to sample_value_prefix for
-                   # clarity
-                   column_value_prefix: str = 'fake.group.',
+                   md_column_name_prefix: str = 'shuffled.grouping.',
+                   md_column_value_prefix: str = 'fake.group.',
                    encode_sample_size: bool = False
                    ) -> pd.DataFrame:
 
@@ -26,21 +24,21 @@ def shuffle_groups(metadata: qiime2.CategoricalMetadataColumn,
 
     value_mapping = {}
     for i, value in enumerate(df[input_column_name].unique()):
-        if encode_sample_size is True:
-            value_mapping[value] = '%s%d%s' % (column_value_prefix, i,
+        if encode_sample_size:
+            value_mapping[value] = '%s%d%s' % (md_column_value_prefix, i,
                                                f'.n={group_sample_size[value]}'
                                                )
         else:
-            value_mapping[value] = '%s%d' % (column_value_prefix, i)
+            value_mapping[value] = '%s%d' % (md_column_value_prefix, i)
 
-    first_column_id = '%s0' % column_name_prefix
+    first_column_id = '%s0' % md_column_name_prefix
     df[first_column_id] = df[input_column_name].map(value_mapping)
 
     df[first_column_id] = \
         np.random.permutation(df[first_column_id].values)
 
     for i in range(1, n_columns):
-        column_id = '%s%d' % (column_name_prefix, i)
+        column_id = '%s%d' % (md_column_name_prefix, i)
         df[column_id] = \
             np.random.permutation(df[first_column_id].values)
 
