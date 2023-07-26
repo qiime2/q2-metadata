@@ -9,13 +9,14 @@
 import pandas as pd
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
+from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, ValidationError,
+    Str, ValidationError, Metadata
 )
 
-from . import tabulate, distance_matrix, shuffle_groups, __version__
+from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
 
 plugin = Plugin(
     name='metadata',
@@ -134,4 +135,36 @@ plugin.methods.register_function(
                  'will match the input metadata column but the association of '
                  'values with sample ids will be random. These data will be '
                  'written to an artifact that can be used as sample metadata.')
+)
+
+
+plugin.methods.register_function(
+    function=merge,
+    inputs={},
+    parameters={'metadata1': Metadata,
+                'metadata2': Metadata},
+    parameter_descriptions={
+        'metadata1': 'First metadata file to merge.',
+        'metadata2': 'Second metadata file to merge.'
+    },
+    outputs=[('merged_metadata', ImmutableMetadata)],
+    output_descriptions={
+        'merged_metadata': 'The merged metadata.'
+    },
+    name='Merge metadata',
+    description=('Merge metadata that contains overlapping ids or overlapping '
+                 'columns, but not both overlapping ids and overlapping '
+                 'columns. The result will be the union (i.e., outer join) '
+                 'of the ids and columns from the two metadata inputs.\n\n'
+                 'Attemping to merge metadata with both overlapping ids and '
+                 'overlapping columns will currently fail because we don\'t '
+                 'resolve conflicting column values for a sample. '
+                 'Merging metadata with neither overlapping ids or '
+                 'overlapping columns is possible with this action.\n\n'
+                 'To merge more than two metadata objects, run this command '
+                 'multiple times, iteratively using the output of the '
+                 'previous run as one of the metadata inputs.\n\n'
+                 'The output, an ImmutableMetadata artifact, can be used '
+                 'anywhere that a metadata file can be used, or can be '
+                 'exported to a metadata tsv file in the typical format.')
 )

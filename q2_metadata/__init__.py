@@ -9,9 +9,10 @@
 from ._tabulate import tabulate
 from ._distance import distance_matrix
 from ._random import shuffle_groups
+from ._merge import merge
 from ._version import get_versions
 
 __version__ = get_versions()['version']
 del get_versions
 
-__all__ = ['tabulate', 'distance_matrix', 'shuffle_groups']
+__all__ = ['tabulate', 'distance_matrix', 'shuffle_groups', 'merge']
