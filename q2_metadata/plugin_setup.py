@@ -13,7 +13,7 @@ from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, Bool, ValidationError,
+    Str, Bool, Metadata, ValidationError,
 )
 
 from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
@@ -123,9 +123,9 @@ plugin.methods.register_function(
         'n_columns': 'The number of shuffled metadata columns to create.',
         'md_column_name_prefix': ('Prefix to use in naming the shuffled '
                                   'metadata columns.'),
-        'md_column_values_prefix': ('Prefix to use in naming the values in the '
-                                    'shuffled metadata columns.'),
-        'encode_sample_size': ('If true, the sample size of each metadata'
+        'md_column_values_prefix': ('Prefix to use in naming the values in '
+                                    'the shuffled metadata columns.'),
+        'encode_sample_size': ('If true, the sample size of each metadata '
                                'group will be appended to the shuffled '
                                'metadata column values.'),
         },
