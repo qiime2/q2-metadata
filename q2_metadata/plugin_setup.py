@@ -125,7 +125,7 @@ plugin.methods.register_function(
         'md_column_values_prefix': ('Prefix to use in naming the values in the '
                                     'shuffled metadata columns.'),
         'encode_sample_size': ('If true, the sample size of each metadata'
-                               'group will be appended to the shuffled'
+                               'group will be appended to the shuffled '
                                'metadata column values.'),
         },
     output_descriptions={
