@@ -28,8 +28,8 @@ class ShuffleGroupsTests(unittest.TestCase):
 
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
-                             column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='fake.group.')
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -52,8 +52,8 @@ class ShuffleGroupsTests(unittest.TestCase):
         random_check = []
         for i in range(self.n_iterations):
             obs2 = shuffle_groups(md, n_columns=1,
-                                  column_name_prefix='shuffled.grouping.',
-                                  column_value_prefix='fake.group.')
+                                  md_column_name_prefix='shuffled.grouping.',
+                                  md_column_values_prefix='fake.group.')
             random_check.append(
                 list(obs['shuffled.grouping.0']) ==
                 list(obs2['shuffled.grouping.0']))
@@ -74,8 +74,8 @@ class ShuffleGroupsTests(unittest.TestCase):
 
         # expected number of rows and columns
         obs = shuffle_groups(md, n_columns=3,
-                             column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='fake.group.')
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (9, 3))
 
         # original column name should not be in the result
@@ -131,8 +131,8 @@ class ShuffleGroupsTests(unittest.TestCase):
 
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
-                             column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='fake.group.')
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -155,8 +155,8 @@ class ShuffleGroupsTests(unittest.TestCase):
 
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
-                             column_name_prefix='1',
-                             column_value_prefix='fake.group.')
+                             md_column_name_prefix='1',
+                             md_column_values_prefix='fake.group.')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -179,8 +179,8 @@ class ShuffleGroupsTests(unittest.TestCase):
 
         # expected number of rows and columns in result
         obs = shuffle_groups(md, n_columns=1,
-                             column_name_prefix='shuffled.grouping.',
-                             column_value_prefix='1')
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='1')
         self.assertEqual(obs.shape, (4, 1))
 
         # expected column names (the original should not be in the result)
@@ -194,3 +194,77 @@ class ShuffleGroupsTests(unittest.TestCase):
         self.assertEqual(
             set(obs['shuffled.grouping.0'].unique()),
             {'11', '10'})
+
+    def test_shuffle_groups_sample_size_column_id_flag_no_input(self):
+        md = qiime2.CategoricalMetadataColumn(
+            pd.Series(['a', 'b', 'a', 'b'], name='groups',
+                      index=pd.Index(['sample1', 'sample2', 'sample3', 's4'],
+                                     name='id'))
+        )
+
+        # expected number of rows and columns in result
+        obs = shuffle_groups(md, n_columns=1,
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.',
+                             )
+
+        # correct group names in new column
+        self.assertEqual(
+            set(obs['shuffled.grouping.0'].unique()),
+            {'fake.group.1', 'fake.group.0'})
+
+    def test_shuffle_groups_sample_size_column_id_flag_true(self):
+        md = qiime2.CategoricalMetadataColumn(
+            pd.Series(['a', 'b', 'a', 'b'], name='groups',
+                      index=pd.Index(['sample1', 'sample2', 'sample3', 's4'],
+                                     name='id'))
+        )
+
+        # expected number of rows and columns in result
+        obs = shuffle_groups(md, n_columns=1,
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.',
+                             encode_sample_size=True)
+
+        # correct group names in new column
+        self.assertEqual(
+            set(obs['shuffled.grouping.0'].unique()),
+            {'fake.group.1.n=2', 'fake.group.0.n=2'})
+
+    def test_shuffle_groups_sample_size_column_id_flag_false(self):
+        md = qiime2.CategoricalMetadataColumn(
+            pd.Series(['a', 'b', 'a', 'b'], name='groups',
+                      index=pd.Index(['sample1', 'sample2', 'sample3', 's4'],
+                                     name='id'))
+        )
+
+        # expected number of rows and columns in result
+        obs = shuffle_groups(md, n_columns=1,
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='1',
+                             encode_sample_size=False)
+
+        # correct group names in new column
+        self.assertEqual(
+            set(obs['shuffled.grouping.0'].unique()),
+            {'11', '10'})
+
+    def test_shuffle_groups_sample_size_equals_value_counts(self):
+        md = qiime2.CategoricalMetadataColumn(
+            pd.Series(['a', 'b', 'b', 'b', 'a', 'b'], name='groups',
+                      index=pd.Index(['sample1', 'sample2', 'sample3', 's4',
+                                      's5', 's6'],
+                                     name='id'))
+        )
+
+        # expected number of rows and columns in result
+        obs = shuffle_groups(md, n_columns=1,
+                             md_column_name_prefix='shuffled.grouping.',
+                             md_column_values_prefix='fake.group.',
+                             encode_sample_size=True)
+
+        # expected number of samples in each group in the new column
+        self.assertEqual(obs['shuffled.grouping.0'].value_counts()
+                         ['fake.group.0.n=2'], 2)
+        self.assertEqual(obs['shuffled.grouping.0'].value_counts()
+                            ['fake.group.1.n=4'], 4)
