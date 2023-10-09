@@ -70,3 +70,6 @@ target/
 
 .DS_Store
 node_modules
+
+#Editor file
+.vscode
