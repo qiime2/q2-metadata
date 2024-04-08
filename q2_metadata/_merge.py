@@ -19,20 +19,29 @@ def merge(metadata1: qiime2.Metadata,
     n_overlapping_ids = len(overlapping_ids)
     n_overlapping_columns = len(overlapping_columns)
 
-    if len(overlapping_ids) > 0 and len(overlapping_columns) > 0:
-        raise ValueError(f"Merging can currently handle overlapping ids "
-                         f"or overlapping columns, but not both. "
-                         f"{n_overlapping_ids} overlapping ids were "
-                         f"identified ({', '.join(overlapping_ids)}) and"
-                         f"{n_overlapping_columns} overlapping columns "
-                         f"were identified {', '.join(overlapping_columns)}.")
+    if n_overlapping_ids and n_overlapping_columns:
+        raise ValueError(
+            "Merging can currently handle overlapping ids or overlapping"
+            f"but not both. {n_overlapping_ids} overlapping ids were "
+            f"identified ({', '.join(overlapping_ids)}) and"
+            f"{n_overlapping_columns} overlapping columns were identified "
+            f"{', '.join(overlapping_columns)}."
+        )
 
     df1 = metadata1.to_dataframe()
     df2 = metadata2.to_dataframe()
 
-    if n_overlapping_columns == 0:
+    if df1.index.name != df2.index.name:
+        raise ValueError(
+            "Metadata files contain different ID column names. First "
+            f"metadata file contains '{df1.index.name}' and the second "
+            f"contains '{df2.index.name}'. These column names must match."
+        )
+
+    if not n_overlapping_columns:
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True)
+
     else:  # i.e., n_overlapping_ids == 0
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True, suffixes=('', '_'))
