@@ -33,8 +33,8 @@ def merge(metadata1: qiime2.Metadata,
 
     if df1.index.name != df2.index.name:
         raise ValueError(
-            "Metadata files contain different ID column names. First "
-            f"metadata file contains '{df1.index.name}' and the second "
+            "Metadata files contain different ID column names. "
+            f"Metadata1 file contains '{df1.index.name}' and metadata2 "
             f"contains '{df2.index.name}'. These column names must match."
         )
 
@@ -42,7 +42,17 @@ def merge(metadata1: qiime2.Metadata,
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True)
 
-    else:  # i.e., n_overlapping_ids == 0
+    else:
+        for column in overlapping_columns:
+            if df1[column].dtype != df2[column].dtype:
+                raise ValueError(
+                    "Metadata files contain identically named columns "
+                    f"with different data-types. The column {column} is of "
+                    f"type {df1[column].dtype} in metadata1 and of type "
+                    f"{df2[column].dtype} in metadata2. These data-types must "
+                    "match."
+                )
+
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True, suffixes=('', '_'))
         for c in overlapping_columns:
