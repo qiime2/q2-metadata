@@ -25,7 +25,7 @@ def merge(metadata1: qiime2.Metadata,
             f"but not both. {n_overlapping_ids} overlapping ids were "
             f"identified ({', '.join(overlapping_ids)}) and "
             f"{n_overlapping_columns} overlapping columns were identified "
-            f"{', '.join(overlapping_columns)}."
+            f"({', '.join(overlapping_columns)})."
         )
 
     df1 = metadata1.to_dataframe()
