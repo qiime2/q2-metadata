@@ -23,7 +23,7 @@ def merge(metadata1: qiime2.Metadata,
         raise ValueError(
             "Merging can currently handle overlapping ids or overlapping"
             f"but not both. {n_overlapping_ids} overlapping ids were "
-            f"identified ({', '.join(overlapping_ids)}) and"
+            f"identified ({', '.join(overlapping_ids)}) and "
             f"{n_overlapping_columns} overlapping columns were identified "
             f"{', '.join(overlapping_columns)}."
         )
