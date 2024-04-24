@@ -198,7 +198,7 @@ class MergeTests(unittest.TestCase):
 
         self.assertEqual(obs1, exp1)
 
-    def test_invalid_index_name_in_error_message(self):
+    def test_merge_mismatched_columnID_names_in_error_message(self):
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
@@ -219,7 +219,7 @@ class MergeTests(unittest.TestCase):
         ):
             merge(md1, md2)
 
-    def test_merge_file_name_in_error_message_float_in_categorical_md(self):
+    def test_merge_mismatched_md_column_type_designations(self):
         index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
         data1 = [['a', 'd', 'h'],
                  ['b', 'e', 'i'],
@@ -232,18 +232,20 @@ class MergeTests(unittest.TestCase):
                 columns=['col1', 'col2', 'col3']
             )
         )
-
         index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='id')
         data2 = [['k', 'n', 40.0],
                  ['l', 'o', 41.0],
                  ['m', 'p', 42.0]]
         md2 = qiime2.Metadata(
-            pd.DataFrame(data2, index=index2, columns=['col1', 'col2', 'col3'])
+            pd.DataFrame(
+                data2,
+                index=index2,
+                columns=['col1', 'col2', 'col3']
+            )
         )
-
         with self.assertRaisesRegex(
             ValueError,
-            "Metadata files contain identically named columns.*col3.*object"
-            ".*float"
+            "Metadata files contain the shared column 'col3' with different "
+            "type designations.*(CategoricalMetadataColumn)"
         ):
             merge(md1, md2)

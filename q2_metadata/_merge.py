@@ -21,8 +21,8 @@ def merge(metadata1: qiime2.Metadata,
 
     if n_overlapping_ids and n_overlapping_columns:
         raise ValueError(
-            "Merging can currently handle overlapping ids or overlapping"
-            f"but not both. {n_overlapping_ids} overlapping ids were "
+            "Merging can currently handle overlapping ids or overlapping "
+            f"columns but not both. {n_overlapping_ids} overlapping ids were "
             f"identified ({', '.join(overlapping_ids)}) and "
             f"{n_overlapping_columns} overlapping columns were identified "
             f"({', '.join(overlapping_columns)})."
@@ -45,11 +45,17 @@ def merge(metadata1: qiime2.Metadata,
     else:
         for column in overlapping_columns:
             if df1[column].dtype != df2[column].dtype:
+                column_type1 = type(
+                    qiime2.Metadata(df1[[column]]).get_column(column))
+                column_type2 = type(
+                    qiime2.Metadata(df2[[column]]).get_column(column))
                 raise ValueError(
-                    "Metadata files contain identically named columns "
-                    f"with different data-types. The column {column} is of "
-                    f"type {df1[column].dtype} in metadata1 and of type "
-                    f"{df2[column].dtype} in metadata2. These data-types must "
+                    f"Metadata files contain the shared column '{column}' "
+                    "with different type designations. "
+                    f"In 'metadata1', the column '{column}' is of type "
+                    f"({column_type1.__name__}), "
+                    f"and in 'metadata2', it is of type "
+                    f"({column_type2.__name__}). These type designations must "
                     "match."
                 )
 
