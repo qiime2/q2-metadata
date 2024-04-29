@@ -246,7 +246,11 @@ class MergeTests(unittest.TestCase):
         with self.assertRaisesRegex(
             ValueError,
             "Metadata files contain the shared column 'col3' with different "
-            "type designations. In 'metadata1', the column 'col3' is of "
-            "type (CategoricalMetadataColumn)"
+            "type designations. In 'metadata1', the column 'col3' is of type "
+            "(CategoricalMetadataColumn) does not match Metadata files "
+            "contain the shared column 'col3' with different type "
+            "designations. In 'metadata1', the column 'col3' is of type "
+            "(CategoricalMetadataColumn), and in 'metadata2', it is of type "
+            "(NumericMetadataColumn). These type designations must match."
         ):
             merge(md1, md2)
