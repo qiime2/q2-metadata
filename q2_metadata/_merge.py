@@ -53,9 +53,9 @@ def merge(metadata1: qiime2.Metadata,
                     f"Metadata files contain the shared column '{column}' "
                     "with different type designations. "
                     f"In 'metadata1', the column '{column}' is of type "
-                    f"({column_type1.__name__}), "
+                    f"'{column_type1.__name__}', "
                     f"and in 'metadata2', it is of type "
-                    f"({column_type2.__name__}). These type designations must "
+                    f"'{column_type2.__name__}'. These type designations must "
                     "match."
                 )
 
