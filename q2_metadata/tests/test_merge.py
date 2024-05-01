@@ -122,8 +122,6 @@ class MergeTests(unittest.TestCase):
                                            columns=['col1', 'col2', 'col3']))
 
         obs1 = merge(md1, md2)
-        print(obs1.to_dataframe())
-
         index_exp1 = pd.Index(['sample1', 'sample2', 'sample3',
                                'sample4', 'sample5', 'sample6'], name='id')
         data_exp1 = [['a', 'd', 'h'],
@@ -135,8 +133,6 @@ class MergeTests(unittest.TestCase):
         exp1 = qiime2.Metadata(
             pd.DataFrame(data_exp1, index=index_exp1, dtype=object,
                          columns=['col1', 'col2', 'col3']))
-
-        print(exp1.to_dataframe())
         self.assertEqual(obs1, exp1)
 
     def test_merge_some_columns_overlapping(self):
@@ -201,3 +197,58 @@ class MergeTests(unittest.TestCase):
                                   'col4', 'col5', 'col6']))
 
         self.assertEqual(obs1, exp1)
+
+    def test_merge_mismatched_columnID_names_in_error_message(self):
+        index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
+        data1 = [['a', 'd', 'h'],
+                 ['b', 'e', 'i'],
+                 ['c', 'f', 'j']]
+        md1 = qiime2.Metadata(pd.DataFrame(data1, index=index1, dtype=object,
+                                           columns=['col1', 'col2', 'col3']))
+
+        index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='sample-id')
+        data2 = [['k', 'n', 'q'],
+                 ['l', 'o', 'r'],
+                 ['m', 'p', 's']]
+        md2 = qiime2.Metadata(pd.DataFrame(data2, index=index2, dtype=object,
+                                           columns=['col4', 'col5', 'col6']))
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "Metadata files contain different ID column names.*id.*sample-id"
+        ):
+            merge(md1, md2)
+
+    def test_merge_mismatched_md_column_type_designations(self):
+        index1 = pd.Index(['sample1', 'sample2', 'sample3'], name='id')
+        data1 = [['a', 'd', 'h'],
+                 ['b', 'e', 'i'],
+                 ['c', 'f', 'j']]
+        md1 = qiime2.Metadata(
+            pd.DataFrame(
+                data1,
+                index=index1,
+                dtype=object,
+                columns=['col1', 'col2', 'col3']
+            )
+        )
+        index2 = pd.Index(['sample4', 'sample5', 'sample6'], name='id')
+        data2 = [['k', 'n', 40.0],
+                 ['l', 'o', 41.0],
+                 ['m', 'p', 42.0]]
+        md2 = qiime2.Metadata(
+            pd.DataFrame(
+                data2,
+                index=index2,
+                columns=['col1', 'col2', 'col3']
+            )
+        )
+        with self.assertRaisesRegex(
+            ValueError,
+            "Metadata files contain the shared column 'col3' with different "
+            "type designations. In 'metadata1', the column 'col3' is of type "
+            r"\'CategoricalMetadataColumn\', and in 'metadata2', it is of "
+            r"type \'NumericMetadataColumn\'. These type designations must "
+            "match."
+        ):
+            merge(md1, md2)

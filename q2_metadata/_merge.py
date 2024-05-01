@@ -19,21 +19,46 @@ def merge(metadata1: qiime2.Metadata,
     n_overlapping_ids = len(overlapping_ids)
     n_overlapping_columns = len(overlapping_columns)
 
-    if len(overlapping_ids) > 0 and len(overlapping_columns) > 0:
-        raise ValueError(f"Merging can currently handle overlapping ids "
-                         f"or overlapping columns, but not both. "
-                         f"{n_overlapping_ids} overlapping ids were "
-                         f"identified ({', '.join(overlapping_ids)}) and"
-                         f"{n_overlapping_columns} overlapping columns "
-                         f"were identified {', '.join(overlapping_columns)}.")
+    if n_overlapping_ids and n_overlapping_columns:
+        raise ValueError(
+            "Merging can currently handle overlapping ids or overlapping "
+            f"columns but not both. {n_overlapping_ids} overlapping ids were "
+            f"identified ({', '.join(overlapping_ids)}) and "
+            f"{n_overlapping_columns} overlapping columns were identified "
+            f"({', '.join(overlapping_columns)})."
+        )
 
     df1 = metadata1.to_dataframe()
     df2 = metadata2.to_dataframe()
 
-    if n_overlapping_columns == 0:
+    if df1.index.name != df2.index.name:
+        raise ValueError(
+            "Metadata files contain different ID column names. "
+            f"Metadata1 file contains '{df1.index.name}' and metadata2 "
+            f"contains '{df2.index.name}'. These column names must match."
+        )
+
+    if not n_overlapping_columns:
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True)
-    else:  # i.e., n_overlapping_ids == 0
+
+    else:
+        for column in overlapping_columns:
+            if df1[column].dtype != df2[column].dtype:
+                column_type1 = type(
+                    qiime2.Metadata(df1[[column]]).get_column(column))
+                column_type2 = type(
+                    qiime2.Metadata(df2[[column]]).get_column(column))
+                raise ValueError(
+                    f"Metadata files contain the shared column '{column}' "
+                    "with different type designations. "
+                    f"In 'metadata1', the column '{column}' is of type "
+                    f"'{column_type1.__name__}', "
+                    f"and in 'metadata2', it is of type "
+                    f"'{column_type2.__name__}'. These type designations must "
+                    "match."
+                )
+
         result = pd.merge(df1, df2, how='outer', left_index=True,
                           right_index=True, suffixes=('', '_'))
         for c in overlapping_columns:
