@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier; NEVER EDIT MANUALLY
+_commit: dfb0404
+_src_path: https://github.com/qiime2/q2-setup-template.git
+module_name: metadata
+plugin_name: q2_metadata
+plugin_scripts: null
+project_author_email: matthewrdillon@gmail.com
+project_author_name: Matthew Ryan Dillon
+project_description: Tools for understanding Metadata
+project_name: q2-metadata
+project_urls_homepage: https://qiime2.org
+project_urls_repository: https://github.com/qiime2/q2-metadata
