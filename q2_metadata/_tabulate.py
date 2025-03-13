@@ -7,7 +7,7 @@
 # ----------------------------------------------------------------------------
 
 import os
-import pkg_resources
+import importlib.resources
 import shutil
 
 import pandas as pd
@@ -16,7 +16,7 @@ import qiime2
 import q2templates
 
 
-TEMPLATES = pkg_resources.resource_filename('q2_metadata', 'templates')
+TEMPLATES = importlib.resources.files('q2_metadata') / 'templates'
 
 
 def tabulate(output_dir: str, input: qiime2.Metadata,
