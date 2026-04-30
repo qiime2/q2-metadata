@@ -31,6 +31,9 @@ class TabulateTests(TestCase):
             viz = open(index_fp).read()
 
             self.assertTrue('pageLength: 100' in viz)
+            self.assertTrue('orderMulti: true' in viz)
+            self.assertTrue("topEnd: 'search'" in viz)
+            self.assertTrue("content: ['search']" in viz)
             self.assertTrue('"columns":[["id",""],["foo","categorical"]]'
                             in viz)
             self.assertTrue(all(i in viz for i in index))

@@ -12,7 +12,7 @@
         This file won't necessarily reflect dynamic sorting or filtering
         options based on the interactive table below.
       </p>
-      <table id="table" class="table table-hover table-striped table-bordered"></table>
+      <table id="table" class="table table-striped table-bordered"></table>
       <div id="loading" class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -69,15 +69,21 @@
           loading.remove();
           console.log('Successfully loaded table!');
         })
-        .on('error.dt', function(error, settings, techNote, message) {
-          // From 'js-error-handler.html'
-          handleErrors([error, settings, techNote, message], loading, helpMsg);
-        })
         .DataTable({
           data: data.data,
           fixedHeader: true,
+          orderMulti: true,
           pageLength: {{ page_size }},
-          dom: 'frtip',
+          layout: {
+            topStart: null,
+            topEnd: 'search',
+            bottomStart: 'info',
+            bottomEnd: 'paging'
+          },
+          columnControl: {
+            target: 1,
+            content: ['search']
+          },
         });
     });
   </script>
