@@ -12,7 +12,7 @@
         This file won't necessarily reflect dynamic sorting or filtering
         options based on the interactive table below.
       </p>
-      <table id="table" class="table table-striped table-bordered"></table>
+      <table id="table" class="table table-hover table-striped table-bordered"></table>
       <div id="loading" class="spinner">
         <div class="rect1"></div>
         <div class="rect2"></div>
@@ -23,6 +23,14 @@
     </div>
   </div>
   <link rel="stylesheet" type="text/css" href="./css/datatables.min.css"/>
+  <style>
+    table.table.dataTable.table-striped > tbody > tr:nth-of-type(2n+1) > * {
+      box-shadow: inset 0 0 0 9999px #F9F9F9;
+    }
+    table.table.dataTable.table-hover > tbody > tr:hover > * {
+      box-shadow: inset 0 0 0 9999px #E8F1F8;
+    }
+  </style>
   <script type="text/javascript" src="./js/datatables.min.js"></script>
 
   {% set loading_selector = '#loading' %}
