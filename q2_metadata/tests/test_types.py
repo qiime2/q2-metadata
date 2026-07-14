@@ -8,8 +8,7 @@
 
 from qiime2.plugin.testing import TestPluginBase
 
-from .. import (ImmutableMetadataDirectoryFormat,
-                               ImmutableMetadata)
+from .. import (ImmutableMetadataDirectoryFormat, ImmutableMetadata)
 
 
 class TestTypes(TestPluginBase):
