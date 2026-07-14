@@ -9,7 +9,9 @@
 import pandas as pd
 from q2_types.distance_matrix import DistanceMatrix
 from q2_types.sample_data import SampleData
-from q2_types.metadata import ImmutableMetadata
+from . import (ImmutableMetadata, ImmutableMetadataDirectoryFormat,
+               ImmutableMetadataFormat)
+import importlib
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
@@ -174,3 +176,14 @@ plugin.methods.register_function(
                  'anywhere that a metadata file can be used, or can be '
                  'exported to a metadata tsv file in the typical format.')
 )
+
+plugin.register_semantic_types(ImmutableMetadata)
+plugin.register_formats(ImmutableMetadataFormat,
+                        ImmutableMetadataDirectoryFormat)
+
+plugin.register_artifact_class(
+    ImmutableMetadata,
+    directory_format=ImmutableMetadataDirectoryFormat,
+    description=("Immutable sample or feature metadata.")
+)
+importlib.import_module('q2_metadata._transformers')
