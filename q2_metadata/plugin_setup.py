@@ -13,10 +13,13 @@ from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, Bool, Metadata, ValidationError,
+    Str, Bool, Metadata, ValidationError, List
 )
 
-from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
+from . import (
+    tabulate, distance_matrix, shuffle_groups, merge, __version__,
+    select
+)
 
 plugin = Plugin(
     name='metadata',
@@ -173,4 +176,29 @@ plugin.methods.register_function(
                  'The output, an ImmutableMetadata artifact, can be used '
                  'anywhere that a metadata file can be used, or can be '
                  'exported to a metadata tsv file in the typical format.')
+)
+
+
+plugin.methods.register_function(
+    function=select,
+    inputs={},
+    parameters={
+        'metadata': Metadata,
+        'columns': List[Str],
+        'keep': Bool,
+    },
+    outputs={'selected_metadata': ImmutableMetadata},
+    parameter_descriptions={
+        'metadata': 'The metadata from which to remove/keep certain columns.',
+        'columns': 'The column names to keep or filter.',
+        'keep': 'Whether to keep only or filter the provided columns.',
+    },
+    output_descriptions={
+        'selected_metadata': (
+            'The metadata with only the columns of interest, or the filtered '
+            'columns removed.'
+        )
+    },
+    name='Select columns from metadata to retain or filter.',
+    description='Filter or keep certain metadata columns.'
 )
