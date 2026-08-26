@@ -189,16 +189,21 @@ plugin.methods.register_function(
     },
     outputs={'selected_metadata': ImmutableMetadata},
     parameter_descriptions={
-        'metadata': 'The metadata from which to remove/keep certain columns.',
-        'columns': 'The column names to keep or filter.',
-        'keep': 'Whether to keep only or filter the provided columns.',
+        'metadata': (
+            'The metadata from which to keep or remove selected columns.'
+        ),
+        'columns': 'The columns to keep or remove.',
+        'keep': (
+            'Whether to keep only (if true) or remove (if false) the '
+            'provided columns.'
+        ),
     },
     output_descriptions={
         'selected_metadata': (
-            'The metadata with only the columns of interest, or the filtered '
-            'columns removed.'
-        )
+            'The resulting metadata after keeping or removing the provided '
+            'columns.'
+        ),
     },
-    name='Select columns from metadata to retain or filter.',
-    description='Filter or keep certain metadata columns.'
+    name='Select columns from metadata to keep or remove.',
+    description='Keep only or remove selected metadata columns.'
 )
