@@ -32,8 +32,12 @@ def select(
     Metadata
         The selected metadata.
     '''
-    metadata = metadata.to_dataframe()
+    if len(metadata.columns) == 0:
+        raise ValueError(
+            'No columns were provided in the metadata.'
+        )
 
+    metadata = metadata.to_dataframe()
     for column in columns:
         if column not in metadata.columns:
             raise ValueError(
@@ -46,5 +50,10 @@ def select(
         remove = columns
 
     metadata.drop(remove, axis=1, inplace=True)
+
+    if len(metadata.columns) == 0:
+        raise ValueError(
+            'No columns remained in the metadata after selecting.'
+        )
 
     return qiime2.Metadata(metadata)

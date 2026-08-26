@@ -66,3 +66,15 @@ class SelectTests(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, r'.*waldo.*not found'):
             self.select_action(self.md, columns=['col1', 'waldo'], keep=False)
+
+    def test_select_errors_empty_input(self):
+        with self.assertRaisesRegex(ValueError, r'No columns were provided'):
+            df = pd.DataFrame({'id': ['a', 'b', 'c']}).set_index('id')
+            md = qiime2.Metadata(df)
+            self.select_action(md, columns=['hmm'])
+
+    def test_select_errors_empty_output(self):
+        with self.assertRaisesRegex(ValueError, r'No columns remained'):
+            self.select_action(
+                self.md, columns=list(self.md.columns), keep=False
+            )
