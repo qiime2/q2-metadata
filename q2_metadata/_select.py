@@ -6,7 +6,10 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
+import warnings
+
 import qiime2
+from qiime2.core.exceptions import RachisWarning
 
 
 def select(
@@ -35,6 +38,12 @@ def select(
     if len(metadata.columns) == 0:
         raise ValueError(
             'No columns were provided in the metadata.'
+        )
+
+    if set(columns) == set(metadata.columns):
+        warnings.warn(
+            'The metadata was unchanged (all columns were retained).',
+            RachisWarning
         )
 
     metadata = metadata.to_dataframe()

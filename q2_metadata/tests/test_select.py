@@ -12,6 +12,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal
 
 import qiime2
+from qiime2.core.exceptions import RachisWarning
 
 
 class SelectTests(unittest.TestCase):
@@ -78,3 +79,7 @@ class SelectTests(unittest.TestCase):
             self.select_action(
                 self.md, columns=list(self.md.columns), keep=False
             )
+
+    def test_select_warns_no_changes(self):
+        with self.assertWarnsRegex(RachisWarning, r'unchanged'):
+            self.select_action(self.md, columns=list(self.md.columns))
