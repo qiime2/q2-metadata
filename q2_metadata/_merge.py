@@ -6,8 +6,6 @@
 # The full license is in the file LICENSE, distributed with this software.
 # ----------------------------------------------------------------------------
 
-from typing import Literal
-
 import qiime2
 import pandas as pd
 
@@ -15,8 +13,25 @@ import pandas as pd
 def merge(
     metadata1: qiime2.Metadata,
     metadata2: qiime2.Metadata,
-    method: Literal['union', 'intersect'] = 'union',
+    method: str = 'union',
 ) -> qiime2.Metadata:
+    '''
+    Parameters
+    ----------
+    metadata1 : qiime2.Metadata
+        The first metadata object to merge. In the case of overlapping columns
+        the values in this object take precedence.
+    metadata2 : qiime2.Metadata
+        The second metadata object to merge.
+    method : str
+        Must be one of "union", "intersect". How to join the records between
+        the two metadata objects.
+
+    Returns
+    -------
+    qiime2.Metadata
+        The merged metadata object.
+    '''
     # Ultimately it would make sense for this action to take
     # List[qiime2.Metadata] as input, but this isn't possible right now
     overlapping_ids = set(metadata1.ids) & set(metadata2.ids)
