@@ -13,10 +13,13 @@ from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, Bool, Metadata, ValidationError,
+    Str, Bool, Metadata, ValidationError, List
 )
 
-from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
+from . import (
+    tabulate, distance_matrix, shuffle_groups, merge, __version__,
+    select
+)
 
 plugin = Plugin(
     name='metadata',
@@ -173,4 +176,41 @@ plugin.methods.register_function(
                  'The output, an ImmutableMetadata artifact, can be used '
                  'anywhere that a metadata file can be used, or can be '
                  'exported to a metadata tsv file in the typical format.')
+)
+
+
+plugin.methods.register_function(
+    function=select,
+    inputs={},
+    parameters={
+        'metadata': Metadata,
+        'columns': List[Str],
+        'use_regex': Bool,
+        'keep': Bool,
+    },
+    outputs={'selected_metadata': ImmutableMetadata},
+    parameter_descriptions={
+        'metadata': (
+            'The metadata from which to keep or remove selected columns.'
+        ),
+        'columns': 'The columns to keep or remove.',
+        'use_regex': (
+            'Whether to interpret the values in `columns` as regular '
+            'expressions. If True then each value can match any number of '
+            'columns. If False then each value must perfectly match exactly '
+            'one column in the metadata.'
+        ),
+        'keep': (
+            'Whether to keep only (if true) or remove (if false) the '
+            'provided columns.'
+        ),
+    },
+    output_descriptions={
+        'selected_metadata': (
+            'The resulting metadata after keeping or removing the provided '
+            'columns.'
+        ),
+    },
+    name='Select columns from metadata to keep or remove.',
+    description='Keep only or remove selected metadata columns.'
 )
