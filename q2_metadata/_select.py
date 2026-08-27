@@ -40,7 +40,7 @@ def select(
             'No columns were provided in the metadata.'
         )
 
-    if set(columns) == set(metadata.columns):
+    if keep and set(columns) == set(metadata.columns):
         warnings.warn(
             'The metadata was unchanged (all columns were retained).',
             RachisWarning
