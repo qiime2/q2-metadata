@@ -10,6 +10,7 @@ import unittest
 
 import numpy as np
 import pandas as pd
+from pandas.testing import assert_frame_equal
 import qiime2
 
 from q2_metadata import merge
@@ -252,3 +253,27 @@ class MergeTests(unittest.TestCase):
             "match."
         ):
             merge(md1, md2)
+
+    def test_merge_intersect_records(self):
+        df1 = pd.DataFrame({
+            'id': ['a', 'b', 'c'],
+            'col1': [1.0, 2.0, 3.0]
+        }).set_index('id')
+        df2 = pd.DataFrame({
+            'id': ['a', 'c', 'd'],
+            'col2': [1.0, 2.0, 3.0]
+        }).set_index('id')
+
+        md1 = qiime2.Metadata(df1)
+        md2 = qiime2.Metadata(df2)
+
+        merged = merge(md1, md2, method='intersect')
+        merged = merged.to_dataframe()
+
+        expected = pd.DataFrame({
+            'id': ['a', 'c',],
+            'col1': [1.0, 3.0],
+            'col2': [1.0, 2.0]
+        }).set_index('id')
+
+        assert_frame_equal(merged, expected)

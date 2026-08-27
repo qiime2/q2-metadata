@@ -13,7 +13,7 @@ from q2_types.metadata import ImmutableMetadata
 import qiime2.plugin
 from qiime2.plugin import (
     Int, Categorical, MetadataColumn, model, Numeric, Plugin, SemanticType,
-    Str, Bool, Metadata, ValidationError,
+    Str, Bool, Metadata, ValidationError, Choices
 )
 
 from . import tabulate, distance_matrix, shuffle_groups, merge, __version__
@@ -147,11 +147,19 @@ plugin.methods.register_function(
 plugin.methods.register_function(
     function=merge,
     inputs={},
-    parameters={'metadata1': Metadata,
-                'metadata2': Metadata},
+    parameters={
+        'metadata1': Metadata,
+        'metadata2': Metadata,
+        'method': Str % Choices(['union', 'intersect']),
+    },
     parameter_descriptions={
         'metadata1': 'First metadata file to merge.',
-        'metadata2': 'Second metadata file to merge.'
+        'metadata2': 'Second metadata file to merge.',
+        'method': (
+            'How to combine records (rows). Specify "union" to keep '
+            'all records from both files. Specify "intersect" to keep only '
+            'records that share an ID between both files.'
+        ),
     },
     outputs=[('merged_metadata', ImmutableMetadata)],
     output_descriptions={
