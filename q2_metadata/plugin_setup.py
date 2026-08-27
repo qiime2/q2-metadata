@@ -185,6 +185,7 @@ plugin.methods.register_function(
     parameters={
         'metadata': Metadata,
         'columns': List[Str],
+        'use_regex': Bool,
         'keep': Bool,
     },
     outputs={'selected_metadata': ImmutableMetadata},
@@ -193,6 +194,12 @@ plugin.methods.register_function(
             'The metadata from which to keep or remove selected columns.'
         ),
         'columns': 'The columns to keep or remove.',
+        'use_regex': (
+            'Whether to interpret the values in `columns` as regular '
+            'expressions. If True then each value can match any number of '
+            'columns. If False then each value must perfectly match exactly '
+            'one column in the metadata.'
+        ),
         'keep': (
             'Whether to keep only (if true) or remove (if false) the '
             'provided columns.'

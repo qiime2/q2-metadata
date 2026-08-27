@@ -83,3 +83,21 @@ class SelectTests(unittest.TestCase):
     def test_select_warns_no_changes(self):
         with self.assertWarnsRegex(RachisWarning, r'unchanged'):
             self.select_action(self.md, columns=list(self.md.columns))
+
+    def test_select_regex(self):
+        selected, = self.select_action(
+            self.md, columns=['col[0-9]'], use_regex=True
+        )
+        selected = selected.view(qiime2.Metadata).to_dataframe()
+        expected = pd.DataFrame({
+            'id': ['1', '2', '3'],
+            'col1': ['a', 'b', 'c'],
+            'col2': [1.0, 2.0, 9.0],
+            'col3': ['some', 'cool', 'stuff'],
+        }).set_index('id')
+
+        assert_frame_equal(selected, expected)
+
+    def test_select_invalid_regex(self):
+        with self.assertRaisesRegex(ValueError, r'invalid regular expression'):
+            self.select_action(self.md, columns=['hmm[x'], use_regex=True)
