@@ -10,8 +10,28 @@ import qiime2
 import pandas as pd
 
 
-def merge(metadata1: qiime2.Metadata,
-          metadata2: qiime2.Metadata) -> qiime2.Metadata:
+def merge(
+    metadata1: qiime2.Metadata,
+    metadata2: qiime2.Metadata,
+    method: str = 'union',
+) -> qiime2.Metadata:
+    '''
+    Parameters
+    ----------
+    metadata1 : qiime2.Metadata
+        The first metadata object to merge. In the case of overlapping columns
+        the values in this object take precedence.
+    metadata2 : qiime2.Metadata
+        The second metadata object to merge.
+    method : str
+        Must be one of "union", "intersect". How to join the records between
+        the two metadata objects.
+
+    Returns
+    -------
+    qiime2.Metadata
+        The merged metadata object.
+    '''
     # Ultimately it would make sense for this action to take
     # List[qiime2.Metadata] as input, but this isn't possible right now
     overlapping_ids = set(metadata1.ids) & set(metadata2.ids)
@@ -38,9 +58,15 @@ def merge(metadata1: qiime2.Metadata,
             f"contains '{df2.index.name}'. These column names must match."
         )
 
+    if method == 'union':
+        how = 'outer'
+    else:
+        how = 'inner'
+
     if not n_overlapping_columns:
-        result = pd.merge(df1, df2, how='outer', left_index=True,
-                          right_index=True)
+        result = pd.merge(
+            df1, df2, how=how, left_index=True, right_index=True
+        )
 
     else:
         for column in overlapping_columns:
@@ -59,8 +85,11 @@ def merge(metadata1: qiime2.Metadata,
                     "match."
                 )
 
-        result = pd.merge(df1, df2, how='outer', left_index=True,
-                          right_index=True, suffixes=('', '_'))
+        result = pd.merge(
+            df1, df2, how=how, left_index=True, right_index=True,
+            suffixes=('', '_')
+        )
+
         for c in overlapping_columns:
             result[c] = result[c].combine_first(result[f"{c}_"])
             result = result.drop(columns=[f"{c}_"])
